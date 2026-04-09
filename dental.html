@@ -281,6 +281,11 @@
             if (examData.oralOtherText) {
                 document.getElementById('oral-other-text').value = examData.oralOtherText;
             }
+            // 男性用户隐藏跳过妇科提示
+            if (examData.gender !== 'female') {
+                const note = document.querySelector('.btn-sub-note');
+                if (note) note.style.display = 'none';
+}
         }
         restoreData();
     </script>
