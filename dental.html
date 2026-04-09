@@ -192,7 +192,7 @@
         </div>
 
         <div class="btn-next-wrap">
-            <button class="btn-next" onclick="goNext()">下一步：妇科检查 →</button>
+            <button id="btn-next-dental" class="btn-next" onclick="goNext()">下一步：妇科检查 →</button>
             <p class="btn-sub-note">（男性可直接跳过妇科进入辅助检查）</p>
         </div>
     </div>
@@ -281,10 +281,12 @@
             if (examData.oralOtherText) {
                 document.getElementById('oral-other-text').value = examData.oralOtherText;
             }
-            // 男性用户隐藏跳过妇科提示
+           // 男性用户隐藏妇科相关提示，并修改按钮文字
             if (examData.gender !== 'female') {
                 const note = document.querySelector('.btn-sub-note');
                 if (note) note.style.display = 'none';
+                const btn = document.getElementById('btn-next-dental');
+                if (btn) btn.textContent = '下一步：辅助检查 →';
 }
         }
         restoreData();
