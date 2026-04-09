@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>眼科检查 - 入伍体检自测</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-top">
+            <a href="userinfo.html" class="btn-back-header">← 返回</a>
+            <span class="header-step">2/9</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 22%"></div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="section-card fade-in">
+            <div class="section-header">
+                <span class="section-icon">👁️</span>
+                <div>
+                    <div class="section-name">眼科检查</div>
+                    <div class="section-desc">视力、色觉及眼部疾病评估</div>
+                </div>
+            </div>
+            <div class="section-body">
+
+                <!-- 视力标准提示 -->
+                <div class="vision-standard-hint" id="vision-standard">
+                    <span class="icon">📋</span>
+                    <div class="standard-text">
+                        <div>视力合格标准</div>
+                        <div style="font-weight:700;color:var(--army-green)" id="vision-standard-text">裸眼视力任一眼 ≥ 4.5（普通兵）</div>
+                    </div>
+                </div>
+
+                <!-- 裸眼视力 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>左眼裸眼视力（对数视力表）</div>
+                    <select id="vision-left" onchange="evaluateVision(); saveData()">
+                        <option value="3.5">3.5（不合格）</option>
+                        <option value="3.6">3.6（不合格）</option>
+                        <option value="3.7">3.7（不合格）</option>
+                        <option value="3.8">3.8（不合格）</option>
+                        <option value="3.9">3.9（不合格）</option>
+                        <option value="4.0">4.0（不合格）</option>
+                        <option value="4.1">4.1（不合格）</option>
+                        <option value="4.2">4.2（不合格）</option>
+                        <option value="4.3">4.3（不合格）</option>
+                        <option value="4.4">4.4（不合格）</option>
+                        <option value="4.5" selected>4.5（合格线）</option>
+                        <option value="4.6">4.6</option>
+                        <option value="4.7">4.7</option>
+                        <option value="4.8">4.8</option>
+                        <option value="4.9">4.9</option>
+                        <option value="5.0">5.0</option>
+                        <option value="5.1">5.1</option>
+                        <option value="5.2">5.2</option>
+                        <option value="5.3">5.3</option>
+                    </select>
+                    <div class="field-hint" id="left-eye-status">左眼：待评估</div>
+                </div>
+
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>右眼裸眼视力（对数视力表）</div>
+                    <select id="vision-right" onchange="evaluateVision(); saveData()">
+                        <option value="3.5">3.5（不合格）</option>
+                        <option value="3.6">3.6（不合格）</option>
+                        <option value="3.7">3.7（不合格）</option>
+                        <option value="3.8">3.8（不合格）</option>
+                        <option value="3.9">3.9（不合格）</option>
+                        <option value="4.0">4.0（不合格）</option>
+                        <option value="4.1">4.1（不合格）</option>
+                        <option value="4.2">4.2（不合格）</option>
+                        <option value="4.3">4.3（不合格）</option>
+                        <option value="4.4">4.4（不合格）</option>
+                        <option value="4.5" selected>4.5（合格线）</option>
+                        <option value="4.6">4.6</option>
+                        <option value="4.7">4.7</option>
+                        <option value="4.8">4.8</option>
+                        <option value="4.9">4.9</option>
+                        <option value="5.0">5.0</option>
+                        <option value="5.1">5.1</option>
+                        <option value="5.2">5.2</option>
+                        <option value="5.3">5.3</option>
+                    </select>
+                    <div class="field-hint" id="right-eye-status">右眼：待评估</div>
+                </div>
+
+                <!-- 近视手术 -->
+                <div class="field">
+                    <div class="field-label">是否做过准分子激光近视手术（LASIK等）？</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'lasik','no')">
+                            <input type="radio" name="lasik" value="no" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">未做过</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'lasik','yes_ok')">
+                            <input type="radio" name="lasik" value="yes_ok">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">做过，已满6个月，无并发症，裸眼视力≥4.8</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'lasik','yes_ng')">
+                            <input type="radio" name="lasik" value="yes_ng">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">做过，但未满6个月 / 有并发症 / 裸眼&lt;4.8</span>
+                        </label>
+                    </div>
+                    <div class="field-hint">普通兵：术后≥6个月，无并发症，度数≤600度可合格；条件兵不允许</div>
+                </div>
+
+                <!-- 矫正视力（近视度数） -->
+                <div class="field">
+                    <div class="field-label">屈光度（近视度数，如未测可跳过）</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'myopia','unknown')">
+                            <input type="radio" name="myopia" value="unknown" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">未测/不清楚</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'myopia','le300')">
+                            <input type="radio" name="myopia" value="le300">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">近视度数 ≤ 300度</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'myopia','le600')">
+                            <input type="radio" name="myopia" value="le600">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">近视度数 301~600度</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'myopia','gt600')">
+                            <input type="radio" name="myopia" value="gt600">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">近视度数 > 600度</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 色觉 -->
+                <div class="field">
+                    <div class="field-label">色觉辨别</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'colorblind','normal')">
+                            <input type="radio" name="colorblind" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">正常，能正确区分红绿蓝等颜色</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'colorblind','weak')">
+                            <input type="radio" name="colorblind" value="weak">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">色弱（对颜色辨别能力减弱）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'colorblind','blind')">
+                            <input type="radio" name="colorblind" value="blind">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">色盲（不能正确辨别颜色）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 眼部疾病 -->
+                <div class="field">
+                    <div class="field-label">眼部疾病（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="eye_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无眼部疾病</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="eye_exophthalmos">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">眼球突出（明显外突）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="eye_nystagmus">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">眼球震颤</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="eye_strabismus">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">斜视（偏斜角度 > 15°）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="eye_cornea">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">角膜疾病（角膜炎/白斑/圆锥角膜等）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="eye_lens">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">晶状体疾病（白内障等）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="eye_retina">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">视网膜疾病（视网膜脱落/病变等）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="eye_glaucoma">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">青光眼</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="eye_other">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">其他眼部疾病</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 眼部其他 -->
+                <div class="field" id="eye-other-field" style="display:none">
+                    <div class="field-label">其他眼部疾病（请描述）</div>
+                    <input type="text" id="eye-other-text" placeholder="请填写具体情况" oninput="saveData()">
+                </div>
+
+                <!-- 条件兵特殊要求 -->
+                <div class="special-standards" id="special-vision-req" style="display:none">
+                    <div class="special-standards-title">⭐ 条件兵视力要求</div>
+                    <ul>
+                        <li>裸眼视力任一眼 ≥ 4.8（更高要求）</li>
+                        <li>不允许近视手术史</li>
+                        <li>无色弱、色盲</li>
+                        <li>无斜视、弱视</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="page-nav">
+        <a href="userinfo.html" class="btn-prev">← 返回</a>
+        <a href="internal.html" class="btn-next">下一步 →</a>
+    </div>
+
+    <script>
+        const savedData = JSON.parse(localStorage.getItem('examData') || '{}');
+        const gender = savedData.gender || 'male';
+        const special = savedData.special || 'normal';
+        const visionMin = special === 'special' ? 4.8 : 4.5;
+
+        // 更新视力标准显示
+        function updateVisionHint() {
+            const txt = document.getElementById('vision-standard-text');
+            if (special === 'special') {
+                txt.textContent = '裸眼视力任一眼 ≥ 4.8（条件兵标准）';
+                document.getElementById('special-vision-req').style.display = 'block';
+            } else {
+                txt.textContent = '裸眼视力任一眼 ≥ 4.5（普通兵标准）';
+                document.getElementById('special-vision-req').style.display = 'none';
+            }
+        }
+        updateVisionHint();
+
+        function setRadio(name, value) {
+            const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+            if (el) {
+                el.checked = true;
+                document.querySelectorAll(`input[name="${name}"]`).forEach(inp => {
+                    inp.closest('.radio-item').classList.toggle('selected', inp.checked);
+                });
+            }
+        }
+
+        function restoreCheckboxes(vals) {
+            (vals || []).forEach(v => {
+                const cb = document.querySelector(`input[value="${v}"]`);
+                if (cb && cb.type === 'checkbox') {
+                    cb.checked = true;
+                    cb.closest('.checkbox-item').classList.add('selected');
+                }
+            });
+        }
+
+        if (savedData.visionLeft) document.getElementById('vision-left').value = savedData.visionLeft;
+        if (savedData.visionRight) document.getElementById('vision-right').value = savedData.visionRight;
+        if (savedData.lasik) setRadio('lasik', savedData.lasik);
+        if (savedData.myopia) setRadio('myopia', savedData.myopia);
+        if (savedData.colorblind) setRadio('colorblind', savedData.colorblind);
+        restoreCheckboxes(savedData.eyeIssues);
+        if (savedData.eyeOtherText) document.getElementById('eye-other-text').value = savedData.eyeOtherText;
+
+        function evaluateVision() {
+            const lv = parseFloat(document.getElementById('vision-left').value);
+            const rv = parseFloat(document.getElementById('vision-right').value);
+            const ls = document.getElementById('left-eye-status');
+            const rs = document.getElementById('right-eye-status');
+            const minV = visionMin;
+
+            ls.textContent = lv >= minV ? `左眼 ${lv} ✓ 合格` : `左眼 ${lv} ✗ 不合格（需≥${minV}）`;
+            ls.style.color = lv >= minV ? '#2e7d32' : '#c62828';
+            rs.textContent = rv >= minV ? `右眼 ${rv} ✓ 合格` : `右眼 ${rv} ✗ 不合格（需≥${minV}）`;
+            rs.style.color = rv >= minV ? '#2e7d32' : '#c62828';
+        }
+        evaluateVision();
+
+        function checkOtherVisible() {
+            const eyeOther = document.querySelector('input[value="eye_other"]');
+            document.getElementById('eye-other-field').style.display = (eyeOther && eyeOther.checked) ? 'block' : 'none';
+        }
+        checkOtherVisible();
+
+        function selectRadio(el, name, value) {
+            el.parentElement.querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function toggleCheckbox(el, e) {
+            if (e) e.preventDefault();
+            el.classList.toggle('selected');
+            el.querySelector('input').checked = el.classList.contains('selected');
+            checkOtherVisible();
+            saveData();
+        }
+
+        function getCheckedValues(selector) {
+            const vals = [];
+            document.querySelectorAll(`${selector} input[type="checkbox"]:checked`).forEach(cb => vals.push(cb.value));
+            return vals;
+        }
+
+        function saveData() {
+            const data = {
+                visionLeft: document.getElementById('vision-left').value,
+                visionRight: document.getElementById('vision-right').value,
+                lasik: document.querySelector('input[name="lasik"]:checked')?.value || 'no',
+                myopia: document.querySelector('input[name="myopia"]:checked')?.value || 'unknown',
+                colorblind: document.querySelector('input[name="colorblind"]:checked')?.value || 'normal',
+                eyeIssues: getCheckedValues('.field:nth-child(7) .checkbox-group'),
+                eyeOtherText: document.getElementById('eye-other-text').value,
+            };
+            localStorage.setItem('examData', JSON.stringify({...savedData, ...data}));
+        }
+    </script>
+</body>
+</html>

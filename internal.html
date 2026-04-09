@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>内科检查 - 入伍体检自测</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-top">
+            <a href="vision.html" class="btn-back-header">← 返回</a>
+            <span class="header-step">3/9</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 33%"></div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="section-card fade-in">
+            <div class="section-header">
+                <span class="section-icon">🫀</span>
+                <div>
+                    <div class="section-name">内科检查</div>
+                    <div class="section-desc">心肺、传染病、神经精神综合评估</div>
+                </div>
+            </div>
+            <div class="section-body">
+
+                <!-- 血压 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>收缩压（高压）mmHg</div>
+                    <div class="input-row">
+                        <input type="number" id="bp-sys" placeholder="如：120" min="70" max="200" value="120">
+                        <span class="input-unit">mmHg</span>
+                    </div>
+                    <div class="field-hint">合格范围：90 ≤ 收缩压 &lt; 140</div>
+                </div>
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>舒张压（低压）mmHg</div>
+                    <div class="input-row">
+                        <input type="number" id="bp-dia" placeholder="如：80" min="40" max="140" value="80">
+                        <span class="input-unit">mmHg</span>
+                    </div>
+                    <div class="field-hint">合格范围：60 ≤ 舒张压 &lt; 90</div>
+                </div>
+
+                <!-- 心率 -->
+                <div class="field">
+                    <div class="field-label">心率（次/分）</div>
+                    <div class="input-row">
+                        <input type="number" id="heart-rate" placeholder="如：75" min="40" max="150" value="75">
+                        <span class="input-unit">次/分</span>
+                    </div>
+                    <div class="field-hint">合格范围：60~100次/分；50~59或101~110需确认为生理性</div>
+                </div>
+
+                <!-- 心脏 -->
+                <div class="field">
+                    <div class="field-label">心脏情况</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'heart','normal')">
+                            <input type="radio" name="heart" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">正常，无心脏病史</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'heart','organic')">
+                            <input type="radio" name="heart" value="organic">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">器质性心脏病（先心/风心/冠心病等）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'heart','rightside')">
+                            <input type="radio" name="heart" value="rightside">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">右位心（心脏在胸腔右侧）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'heart','arrhythmia')">
+                            <input type="radio" name="heart" value="arrhythmia">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">心律失常（明显/持续性）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 血糖 -->
+                <div class="field">
+                    <div class="field-label">空腹血糖（mmol/L）</div>
+                    <div class="input-row">
+                        <input type="number" id="blood-glucose" placeholder="如：5.0" min="1" max="30" step="0.1" value="5.0">
+                        <span class="input-unit">mmol/L</span>
+                    </div>
+                    <div class="field-hint">合格标准：&lt; 7.0 mmol/L；正常范围 3.9~6.1</div>
+                </div>
+
+                <!-- 呼吸系统 -->
+                <div class="field">
+                    <div class="field-label">呼吸系统疾病（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="resp_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无呼吸系统疾病</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="resp_bronchitis">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">慢性支气管炎</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="resp_asthma">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">支气管哮喘</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="resp_pneumothorax">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">气胸史</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="resp_other">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">其他肺部疾病</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 胃肠肝胆 -->
+                <div class="field">
+                    <div class="field-label">胃肠肝胆疾病（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="gi_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="gi_gastric">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">严重慢性胃炎/胃溃疡</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="gi_liver">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">肝脏肿大（超标）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="gi_spleen">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">脾脏肿大（超标）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="gi_colitis">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">严重慢性结肠炎/肠道病</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 内分泌代谢 -->
+                <div class="field">
+                    <div class="field-label">内分泌/代谢疾病（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="endo_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="endo_diabetes">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">糖尿病</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="endo_hyperthyroid">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">甲状腺功能亢进（甲亢）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="endo_other">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">其他内分泌疾病</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 传染病 -->
+                <div class="field">
+                    <div class="field-label">传染病史（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="inf_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="inf_hbsag">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">乙肝表面抗原阳性（HBsAg+）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="inf_hiv">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">HIV抗体阳性</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="inf_tb">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">肺结核（未愈/治疗中）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="inf_hepatitis">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">病毒性肝炎活动期（未愈）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 神经精神 -->
+                <div class="field">
+                    <div class="field-label">神经/精神疾病（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neuro_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neuro_epilepsy">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">癫痫</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neuro_schizophrenia">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">精神分裂症</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neuro_depression">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">抑郁症（确诊）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neuro_sleepwalk">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">梦游症</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neuro_enuresis">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">遗尿症（18岁以上仍有）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neuro_stutter">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">严重口吃（影响正常交流）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neuro_other">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">其他神经/精神疾病</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 神经精神其他 -->
+                <div class="field" id="neuro-other-field" style="display:none">
+                    <div class="field-label">其他神经/精神疾病（请描述）</div>
+                    <input type="text" id="neuro-other-text" placeholder="请填写具体诊断" oninput="saveData()">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="page-nav">
+        <a href="vision.html" class="btn-prev">← 返回</a>
+        <a href="surgical.html" class="btn-next">下一步 →</a>
+    </div>
+
+    <script>
+        const savedData = JSON.parse(localStorage.getItem('examData') || '{}');
+
+        function setRadio(name, value) {
+            const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+            if (el) {
+                el.checked = true;
+                document.querySelectorAll(`input[name="${name}"]`).forEach(inp => {
+                    inp.closest('.radio-item').classList.toggle('selected', inp.checked);
+                });
+            }
+        }
+
+        function restoreCheckboxes(vals) {
+            (vals || []).forEach(v => {
+                const cb = document.querySelector(`input[value="${v}"]`);
+                if (cb && cb.type === 'checkbox') {
+                    cb.checked = true;
+                    cb.closest('.checkbox-item').classList.add('selected');
+                }
+            });
+        }
+
+        if (savedData.bpSys) document.getElementById('bp-sys').value = savedData.bpSys;
+        if (savedData.bpDia) document.getElementById('bp-dia').value = savedData.bpDia;
+        if (savedData.heartRate) document.getElementById('heart-rate').value = savedData.heartRate;
+        if (savedData.bloodGlucose) document.getElementById('blood-glucose').value = savedData.bloodGlucose;
+        if (savedData.heartCondition) setRadio('heart', savedData.heartCondition);
+        restoreCheckboxes(savedData.respIssues);
+        restoreCheckboxes(savedData.giIssues);
+        restoreCheckboxes(savedData.endoIssues);
+        restoreCheckboxes(savedData.infIssues);
+        restoreCheckboxes(savedData.neuroIssues);
+        if (savedData.neuroOtherText) document.getElementById('neuro-other-text').value = savedData.neuroOtherText;
+
+        function checkOtherVisible() {
+            const neuroOther = document.querySelector('input[value="neuro_other"]');
+            document.getElementById('neuro-other-field').style.display = (neuroOther && neuroOther.checked) ? 'block' : 'none';
+        }
+        checkOtherVisible();
+
+        function selectRadio(el, name, value) {
+            el.parentElement.querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function toggleCheckbox(el, e) {
+            if (e) e.preventDefault();
+            el.classList.toggle('selected');
+            el.querySelector('input').checked = el.classList.contains('selected');
+            checkOtherVisible();
+            saveData();
+        }
+
+        function getCheckedValues(selector) {
+            const vals = [];
+            document.querySelectorAll(`${selector} input[type="checkbox"]:checked`).forEach(cb => vals.push(cb.value));
+            return vals;
+        }
+
+        function saveData() {
+            const data = {
+                bpSys: document.getElementById('bp-sys').value,
+                bpDia: document.getElementById('bp-dia').value,
+                heartRate: document.getElementById('heart-rate').value,
+                bloodGlucose: document.getElementById('blood-glucose').value,
+                heartCondition: document.querySelector('input[name="heart"]:checked')?.value || 'normal',
+                respIssues: getCheckedValues('.field:nth-child(6) .checkbox-group'),
+                giIssues: getCheckedValues('.field:nth-child(7) .checkbox-group'),
+                endoIssues: getCheckedValues('.field:nth-child(8) .checkbox-group'),
+                infIssues: getCheckedValues('.field:nth-child(9) .checkbox-group'),
+                neuroIssues: getCheckedValues('.field:nth-child(10) .checkbox-group'),
+                neuroOtherText: document.getElementById('neuro-other-text').value,
+            };
+            localStorage.setItem('examData', JSON.stringify({...savedData, ...data}));
+        }
+
+        document.querySelectorAll('input[type="number"]').forEach(el => el.addEventListener('input', saveData));
+    </script>
+</body>
+</html>

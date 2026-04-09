@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>基本信息 - 入伍体检自测</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <div class="page-header">
+        <div class="header-top">
+            <a href="index.html" class="btn-back-header">← 返回首页</a>
+            <span class="header-step">1/9</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 12%"></div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="section-card fade-in">
+            <div class="section-header">
+                <span class="section-icon">🏋️</span>
+                <div>
+                    <div class="section-name">基本信息</div>
+                    <div class="section-desc">身高体重及基本条件</div>
+                </div>
+            </div>
+            <div class="section-body">
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>性别</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this, 'gender', 'male'); updateStandards();">
+                            <input type="radio" name="gender" value="male" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">男性</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this, 'gender', 'female'); updateStandards();">
+                            <input type="radio" name="gender" value="female">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">女性</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="field-label">年龄（岁）</div>
+                    <input type="number" id="age" placeholder="如：20" min="17" max="25" value="20">
+                </div>
+
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>身高（cm）</div>
+                    <div class="input-row">
+                        <input type="number" id="height" placeholder="如：175" min="140" max="200">
+                        <span class="input-unit">cm</span>
+                    </div>
+                    <div class="field-hint" id="height-standard">男性标准：≥160cm</div>
+                </div>
+
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>体重（kg）</div>
+                    <div class="input-row">
+                        <input type="number" id="weight" placeholder="如：68" min="30" max="150">
+                        <span class="input-unit">kg</span>
+                    </div>
+                </div>
+
+                <div class="bmi-display">
+                    <span>BMI：</span>
+                    <span class="bmi-value-num" id="bmi-value">--</span>
+                    <span id="bmi-status" class="bmi-tag">待计算</span>
+                </div>
+                <div class="field-hint" id="bmi-standard">男性普通兵标准：17.5-30</div>
+
+                <div class="field" style="margin-top: 20px;">
+                    <div class="field-label"><span class="req">*</span>应征类别</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this, 'special', 'normal'); updateStandards();">
+                            <input type="radio" name="special" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">普通兵</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this, 'special', 'special'); updateStandards();">
+                            <input type="radio" name="special" value="special">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">条件兵</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 用户类型汇总标签 -->
+                <div class="user-type-summary" id="user-type-summary">
+                    <span class="type-tag gender-tag">男性</span>
+                    <span class="type-tag">普通兵</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="page-nav">
+        <a href="index.html" class="btn-prev">← 返回</a>
+        <a href="vision.html" class="btn-next">下一步 →</a>
+    </div>
+
+    <script>
+        // 从localStorage读取已有数据
+        const savedData = JSON.parse(localStorage.getItem('examData') || '{}');
+
+        // 性别名称映射
+        const genderNames = { male: '男性', female: '女性' };
+
+        // 身高标准（普通兵/条件兵）
+        const heightStandards = {
+            male:   { normal: { min: 160, name: '≥160cm' }, special: { min: 162, name: '≥162cm' } },
+            female: { normal: { min: 158, name: '≥158cm' }, special: { min: 160, name: '≥160cm' } }
+        };
+
+        // BMI标准（普通兵/条件兵）
+        const bmiStandards = {
+            male:   { normal: { min: 17.5, max: 30, name: '17.5-30' }, special: { min: 17.5, max: 27, name: '17.5-27' } },
+            female: { normal: { min: 17,   max: 24, name: '17-24'   }, special: { min: 17,   max: 24, name: '17-24'   } }
+        };
+
+        // 恢复已保存的数据
+        if (savedData.gender) {
+            const el = document.querySelector(`input[name="gender"][value="${savedData.gender}"]`);
+            if (el) el.checked = true;
+            if (savedData.gender === 'female') {
+                document.querySelectorAll('input[name="gender"]')[1].closest('.radio-item').classList.add('selected');
+                document.querySelectorAll('input[name="gender"]')[0].closest('.radio-item').classList.remove('selected');
+            }
+        }
+        if (savedData.age)    document.getElementById('age').value    = savedData.age;
+        if (savedData.height) document.getElementById('height').value = savedData.height;
+        if (savedData.weight) document.getElementById('weight').value = savedData.weight;
+        if (savedData.special === 'special') {
+            document.querySelector('input[name="special"][value="special"]').checked = true;
+            document.querySelectorAll('input[name="special"]')[0].closest('.radio-item').classList.remove('selected');
+            document.querySelectorAll('input[name="special"]')[1].closest('.radio-item').classList.add('selected');
+        }
+
+        // 更新标准提示
+        function updateStandards() {
+            const gender  = document.querySelector('input[name="gender"]:checked').value;
+            const special = document.querySelector('input[name="special"]:checked').value;
+
+            // 身高标准提示
+            const heightStd = heightStandards[gender][special] || heightStandards[gender].normal;
+            const heightHint = document.getElementById('height-standard');
+            heightHint.textContent = `${special === 'special' ? '条件兵' : ''}身高标准：${heightStd.name}`;
+
+            // BMI标准提示
+            const bmiStd = bmiStandards[gender][special] || bmiStandards[gender].normal;
+            document.getElementById('bmi-standard').textContent =
+                `${gender === 'male' ? '男性' : '女性'}${special === 'special' ? '条件兵' : '普通兵'}BMI标准：${bmiStd.name}`;
+
+            // 用户类型汇总
+            const genderTag = document.querySelector('.gender-tag');
+            const typeTag   = document.querySelectorAll('.type-tag')[1];
+            genderTag.textContent = genderNames[gender];
+            genderTag.className   = 'type-tag gender-tag ' + gender;
+            typeTag.textContent   = special === 'special' ? '条件兵' : '普通兵';
+            typeTag.className     = special === 'special' ? 'type-tag special-tag' : 'type-tag normal-tag';
+
+            updateBMI();
+        }
+
+        // 保存数据
+        function saveData() {
+            const gender  = document.querySelector('input[name="gender"]:checked').value;
+            const special = document.querySelector('input[name="special"]:checked').value;
+            const data = {
+                gender:  gender,
+                age:     parseInt(document.getElementById('age').value)    || 20,
+                height:  parseInt(document.getElementById('height').value) || 170,
+                weight:  parseInt(document.getElementById('weight').value) || 65,
+                special: special
+            };
+            localStorage.setItem('examData', JSON.stringify({...savedData, ...data}));
+        }
+
+        // 单选点击效果
+        function selectRadio(el, name, value) {
+            const group = el.parentElement;
+            group.querySelectorAll('.radio-item').forEach(item => item.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        // BMI计算
+        function updateBMI() {
+            const h = parseInt(document.getElementById('height').value) || 0;
+            const w = parseInt(document.getElementById('weight').value) || 0;
+            const gender  = document.querySelector('input[name="gender"]:checked').value;
+            const special = document.querySelector('input[name="special"]:checked').value;
+
+            if (h > 0 && w > 0) {
+                const bmi    = (w / ((h/100)*(h/100))).toFixed(1);
+                const bmiStd = bmiStandards[gender][special] || bmiStandards[gender].normal;
+                document.getElementById('bmi-value').textContent = bmi;
+                const status = document.getElementById('bmi-status');
+                if (bmi < bmiStd.min || bmi > bmiStd.max) {
+                    status.textContent = '不合格';
+                    status.className   = 'bmi-tag fail';
+                } else {
+                    status.textContent = '合格';
+                    status.className   = 'bmi-tag pass';
+                }
+            } else {
+                document.getElementById('bmi-value').textContent  = '--';
+                document.getElementById('bmi-status').textContent = '待计算';
+                document.getElementById('bmi-status').className   = 'bmi-tag';
+            }
+        }
+
+        document.querySelectorAll('input').forEach(el => el.addEventListener('change', saveData));
+        document.querySelectorAll('input').forEach(el => el.addEventListener('input',  saveData));
+        document.getElementById('height').addEventListener('input', updateBMI);
+        document.getElementById('weight').addEventListener('input', updateBMI);
+        updateStandards();
+    </script>
+</body>
+</html>

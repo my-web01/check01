@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>妇科检查 - 入伍体检自测</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-top">
+            <a href="dental.html" class="btn-back-header">← 返回</a>
+            <span class="header-step">7/9</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 77%"></div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <!-- 女性专属标识 -->
+        <div class="gender-badge-wrap" style="margin:14px 16px 0;padding:10px 14px;background:linear-gradient(135deg,#fce4ec,#f8bbd9);border-radius:12px;display:flex;align-items:center;gap:10px;font-size:13px;color:#880e4f">
+            <span style="font-size:20px">🌸</span>
+            <span>本页为<strong>女性专属检查项目</strong>，男性应征者无需填写此页</span>
+        </div>
+
+        <div class="section-card fade-in" style="margin-top:12px">
+            <div class="section-header">
+                <span class="section-icon">🌸</span>
+                <div>
+                    <div class="section-name">妇科检查（女性）</div>
+                    <div class="section-desc">月经、生殖器、盆腔及妊娠评估</div>
+                </div>
+            </div>
+            <div class="section-body">
+
+                <!-- 月经情况 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>月经情况</div>
+                    <div class="field-hint">闭经（半年以上无月经）、严重痛经（需卧床或止痛药）、子宫异常出血均需关注</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'menstruation','normal')">
+                            <input type="radio" name="menstruation" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">月经规律，无明显异常</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'menstruation','mild_dysmenorrhea')">
+                            <input type="radio" name="menstruation" value="mild_dysmenorrhea">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">轻度痛经（偶有不适，无需药物）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'menstruation','severe_dysmenorrhea')">
+                            <input type="radio" name="menstruation" value="severe_dysmenorrhea">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">严重痛经（需卧床休息或止痛药，影响日常）（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'menstruation','amenorrhea')">
+                            <input type="radio" name="menstruation" value="amenorrhea">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">闭经（连续6个月以上无月经）（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'menstruation','irregular_bleeding')">
+                            <input type="radio" name="menstruation" value="irregular_bleeding">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">子宫异常出血（非月经期出血/量异常/持续时间异常）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'menstruation','irregular')">
+                            <input type="radio" name="menstruation" value="irregular">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">月经不规律（周期/经量偶有异常，无严重症状）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 妊娠状态 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>妊娠状态</div>
+                    <div class="field-hint">妊娠期（含早期妊娠）为暂时不合格，需待产后满足条件方可参军</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'pregnancy','none')">
+                            <input type="radio" name="pregnancy" value="none" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">非妊娠状态</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'pregnancy','pregnant')">
+                            <input type="radio" name="pregnancy" value="pregnant">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">目前处于妊娠期（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'pregnancy','uncertain')">
+                            <input type="radio" name="pregnancy" value="uncertain">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">不确定（建议先做妊娠试验确认）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 生殖器情况 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>生殖器情况</div>
+                    <div class="field-hint">生殖器发育异常、先天畸形等影响功能者为不合格</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'genitalia','normal')">
+                            <input type="radio" name="genitalia" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">发育正常，无畸形</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'genitalia','deformity')">
+                            <input type="radio" name="genitalia" value="deformity">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">生殖器官发育异常/先天畸形（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'genitalia','surgery')">
+                            <input type="radio" name="genitalia" value="surgery">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">有妇科手术史（宫颈/子宫/卵巢手术等）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 盆腔情况 -->
+                <div class="field">
+                    <div class="field-label">盆腔情况（可多选）</div>
+                    <div class="field-hint">急/慢性盆腔炎、盆腔肿物（如子宫肌瘤、卵巢囊肿等）均需评估</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="pelvis_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="pelvis_pid">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">盆腔炎（急性或慢性盆腔炎症）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="pelvis_myoma">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">子宫肌瘤（已确诊）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="pelvis_cyst">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">卵巢囊肿（已确诊）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="pelvis_mass">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">盆腔不明肿物（待查）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="pelvis_endometriosis">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">子宫内膜异位症（已确诊）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)" id="pelvis-other-toggle">
+                            <input type="checkbox" value="pelvis_other">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">其他盆腔问题</span>
+                        </label>
+                    </div>
+                    <div id="pelvis-other-detail" style="display:none;margin-top:10px">
+                        <textarea id="pelvis-other-text" class="other-input" rows="2" placeholder="请描述其他盆腔问题详情..." oninput="saveData()"></textarea>
+                    </div>
+                </div>
+
+                <!-- 阴道炎 -->
+                <div class="field">
+                    <div class="field-label">阴道炎情况</div>
+                    <div class="field-hint">霉菌性/滴虫性阴道炎须在体检前治愈；细菌性阴道病视严重程度评估</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'vaginitis','none')">
+                            <input type="radio" name="vaginitis" value="none" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">无阴道炎</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'vaginitis','fungal_treated')">
+                            <input type="radio" name="vaginitis" value="fungal_treated">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">霉菌性阴道炎，已治愈</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'vaginitis','fungal_active')">
+                            <input type="radio" name="vaginitis" value="fungal_active">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">霉菌性阴道炎，未治愈（需治愈后再参加体检）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'vaginitis','trichomonas_treated')">
+                            <input type="radio" name="vaginitis" value="trichomonas_treated">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">滴虫性阴道炎，已治愈</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'vaginitis','trichomonas_active')">
+                            <input type="radio" name="vaginitis" value="trichomonas_active">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">滴虫性阴道炎，未治愈（需治愈后再参加体检）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'vaginitis','bacterial')">
+                            <input type="radio" name="vaginitis" value="bacterial">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">细菌性阴道病</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 宫颈情况 -->
+                <div class="field">
+                    <div class="field-label">宫颈情况（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="cervix_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="cervix_erosion">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">宫颈糜烂/宫颈炎（轻中度）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="cervix_polyp">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">宫颈息肉</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="cervix_cin">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">宫颈上皮内瘤变（CIN）/ 宫颈癌前病变</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="cervix_cancer">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">宫颈癌（不合格）</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="btn-next-wrap">
+            <button class="btn-next" onclick="goNext()">下一步：辅助检查 →</button>
+        </div>
+    </div>
+
+    <script>
+        let examData = JSON.parse(localStorage.getItem('examData') || '{}');
+
+        // 检查是否为女性，否则跳转
+        if (examData.gender && examData.gender !== 'female') {
+            window.location.href = 'labtest.html';
+        }
+
+        function selectRadio(el, key, val) {
+            document.querySelectorAll(`[name="${key}"]`).forEach(r => {
+                r.closest('.radio-item').classList.remove('selected');
+            });
+            el.classList.add('selected');
+            examData[key] = val;
+            saveData();
+        }
+
+        function toggleCheckbox(el, e) {
+            if (e) e.preventDefault();
+            el.classList.toggle('checked');
+            const input = el.querySelector('input');
+            input.checked = !input.checked;
+            if (input.value === 'pelvis_other') {
+                document.getElementById('pelvis-other-detail').style.display = input.checked ? 'block' : 'none';
+            }
+            saveData();
+        }
+
+        function saveData() {
+            const checkedPelvis = [...document.querySelectorAll('.checkbox-group .checkbox-item.checked')]
+                .map(el => el.querySelector('input').value)
+                .filter(v => v.startsWith('pelvis_'));
+            const checkedCervix = [...document.querySelectorAll('.checkbox-group .checkbox-item.checked')]
+                .map(el => el.querySelector('input').value)
+                .filter(v => v.startsWith('cervix_'));
+            examData.pelvisIssues = checkedPelvis;
+            examData.cervixIssues = checkedCervix;
+            examData.pelvisOtherText = document.getElementById('pelvis-other-text').value;
+            localStorage.setItem('examData', JSON.stringify(examData));
+        }
+
+        function goNext() {
+            saveData();
+            window.location.href = 'labtest.html';
+        }
+
+        // 恢复已保存的数据
+        function restoreData() {
+            ['menstruation', 'pregnancy', 'genitalia', 'vaginitis'].forEach(key => {
+                const val = examData[key];
+                if (val) {
+                    const radio = document.querySelector(`input[name="${key}"][value="${val}"]`);
+                    if (radio) {
+                        document.querySelectorAll(`[name="${key}"]`).forEach(r => r.closest('.radio-item').classList.remove('selected'));
+                        radio.closest('.radio-item').classList.add('selected');
+                    }
+                }
+            });
+            const allChecked = [...(examData.pelvisIssues || []), ...(examData.cervixIssues || [])];
+            allChecked.forEach(val => {
+                const cb = document.querySelector(`.checkbox-group input[value="${val}"]`);
+                if (cb) {
+                    cb.checked = true;
+                    cb.closest('.checkbox-item').classList.add('checked');
+                    if (val === 'pelvis_other') {
+                        document.getElementById('pelvis-other-detail').style.display = 'block';
+                    }
+                }
+            });
+            if (examData.pelvisOtherText) {
+                document.getElementById('pelvis-other-text').value = examData.pelvisOtherText;
+            }
+        }
+        restoreData();
+    </script>
+</body>
+</html>

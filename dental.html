@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>口腔科检查 - 入伍体检自测</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-top">
+            <a href="hearing.html" class="btn-back-header">← 返回</a>
+            <span class="header-step">6/9</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 66%"></div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="section-card fade-in">
+            <div class="section-header">
+                <span class="section-icon">🦷</span>
+                <div>
+                    <div class="section-name">口腔科检查</div>
+                    <div class="section-desc">龋齿、缺齿、牙周、咬合及口腔肿物评估</div>
+                </div>
+            </div>
+            <div class="section-body">
+
+                <!-- 龋齿 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>龋齿（蛀牙）情况</div>
+                    <div class="field-hint">龋齿深度（蛀牙洞深达牙本质以下为深龋）超过3个为不合格</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'caries','none')">
+                            <input type="radio" name="caries" value="none" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">无龋齿</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'caries','le3')">
+                            <input type="radio" name="caries" value="le3">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">深龋 ≤3个（合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'caries','gt3')">
+                            <input type="radio" name="caries" value="gt3">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">深龋 &gt;3个（不合格）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 缺齿 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>缺齿情况</div>
+                    <div class="field-hint">缺牙超过2颗（正畸拔除除外）为不合格；义齿（假牙）需标注</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'missing','none'); toggleMissingDetail(false)">
+                            <input type="radio" name="missing" value="none" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">无缺牙</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'missing','orthodontic'); toggleMissingDetail(false)">
+                            <input type="radio" name="missing" value="orthodontic">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">仅因正畸拔除，已修复（合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'missing','le2'); toggleMissingDetail(false)">
+                            <input type="radio" name="missing" value="le2">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">缺牙 1~2颗（合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'missing','gt2'); toggleMissingDetail(true)">
+                            <input type="radio" name="missing" value="gt2">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">缺牙 &gt;2颗（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'missing','denture'); toggleMissingDetail(true)">
+                            <input type="radio" name="missing" value="denture">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">有义齿（假牙）</span>
+                        </label>
+                    </div>
+                    <div id="missing-detail" style="display:none;margin-top:10px">
+                        <textarea id="missing-detail-text" class="other-input" rows="2" placeholder="请描述缺牙位置、数量及是否已修复..." oninput="saveData()"></textarea>
+                    </div>
+                </div>
+
+                <!-- 牙周 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>牙周情况</div>
+                    <div class="field-hint">重度牙周炎（牙龈萎缩、牙槽骨吸收、牙齿松动）为不合格</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'periodontal','normal')">
+                            <input type="radio" name="periodontal" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">牙周健康，无明显问题</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'periodontal','mild')">
+                            <input type="radio" name="periodontal" value="mild">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">轻度牙周炎（偶有出血、牙石）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'periodontal','moderate')">
+                            <input type="radio" name="periodontal" value="moderate">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">中度牙周炎（牙龈萎缩、牙根暴露）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'periodontal','severe')">
+                            <input type="radio" name="periodontal" value="severe">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">重度牙周炎（牙齿松动、溢脓、骨吸收）（不合格）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 咬合关系 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>咬合关系</div>
+                    <div class="field-hint">严重反颌（地包天）、开颌（上下牙无法咬合）、深覆颌（深咬）等为不合格</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'occlusion','normal')">
+                            <input type="radio" name="occlusion" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">正常咬合</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'occlusion','crossbite')">
+                            <input type="radio" name="occlusion" value="crossbite">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">反颌（地包天）—— 下前牙覆盖上前牙</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'occlusion','open')">
+                            <input type="radio" name="occlusion" value="open">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">开颌 —— 上下牙咬合时前牙无法接触</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'occlusion','deep')">
+                            <input type="radio" name="occlusion" value="deep">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">深覆颌 —— 上前牙垂直覆盖下前牙过深</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'occlusion','severe')">
+                            <input type="radio" name="occlusion" value="severe">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">严重畸形咬合（影响咀嚼/言语功能）（不合格）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 口腔肿瘤及腮腺 -->
+                <div class="field">
+                    <div class="field-label">口腔肿物 / 腮腺疾病（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="oral_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="oral_benign">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">口腔良性肿物（≤1cm，未影响功能）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="oral_malignant">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">口腔恶性肿瘤（不合格）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="oral_parotid">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">腮腺疾病（腮腺肿大/混合瘤/腮腺炎后遗症等）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="oral_ulcer">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">严重复发性口腔溃疡（持续发作，影响进食）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)" id="oral-other-toggle">
+                            <input type="checkbox" value="oral_other">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">其他口腔问题</span>
+                        </label>
+                    </div>
+                    <div id="oral-other-detail" style="display:none;margin-top:10px">
+                        <textarea id="oral-other-text" class="other-input" rows="2" placeholder="请描述其他口腔问题详情..." oninput="saveData()"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="btn-next-wrap">
+            <button class="btn-next" onclick="goNext()">下一步：妇科检查 →</button>
+            <p class="btn-sub-note">（男性可直接跳过妇科进入辅助检查）</p>
+        </div>
+    </div>
+
+    <script>
+        // 从localStorage读取数据
+        let examData = JSON.parse(localStorage.getItem('examData') || '{}');
+
+        function selectRadio(el, key, val) {
+            document.querySelectorAll(`[name="${key}"]`).forEach(r => {
+                r.closest('.radio-item').classList.remove('selected');
+            });
+            el.classList.add('selected');
+            examData[key] = val;
+            saveData();
+        }
+
+        function toggleCheckbox(el, e) {
+            if (e) e.preventDefault();
+            el.classList.toggle('checked');
+            const input = el.querySelector('input');
+            input.checked = !input.checked;
+
+            // 处理其他选项的展开
+            if (input.value === 'oral_other') {
+                document.getElementById('oral-other-detail').style.display = input.checked ? 'block' : 'none';
+            }
+            saveData();
+        }
+
+        function toggleMissingDetail(show) {
+            document.getElementById('missing-detail').style.display = show ? 'block' : 'none';
+        }
+
+        function saveData() {
+            const checkedOral = [...document.querySelectorAll('.checkbox-group .checkbox-item.checked')]
+                .map(el => el.querySelector('input').value);
+            examData.oralIssues = checkedOral;
+            examData.dentalMissingDetail = document.getElementById('missing-detail-text').value;
+            examData.oralOtherText = document.getElementById('oral-other-text').value;
+            localStorage.setItem('examData', JSON.stringify(examData));
+        }
+
+        function goNext() {
+            saveData();
+            const gender = examData.gender || 'male';
+            if (gender === 'female') {
+                window.location.href = 'gynecology.html';
+            } else {
+                window.location.href = 'labtest.html';
+            }
+        }
+
+        // 恢复已保存的数据
+        function restoreData() {
+            // 恢复单选
+            ['caries', 'missing', 'periodontal', 'occlusion'].forEach(key => {
+                const val = examData[key];
+                if (val) {
+                    const radio = document.querySelector(`input[name="${key}"][value="${val}"]`);
+                    if (radio) {
+                        document.querySelectorAll(`[name="${key}"]`).forEach(r => r.closest('.radio-item').classList.remove('selected'));
+                        radio.closest('.radio-item').classList.add('selected');
+                    }
+                }
+            });
+            // 恢复复选框
+            if (examData.oralIssues) {
+                examData.oralIssues.forEach(val => {
+                    const cb = document.querySelector(`.checkbox-group input[value="${val}"]`);
+                    if (cb) {
+                        cb.checked = true;
+                        cb.closest('.checkbox-item').classList.add('checked');
+                        if (val === 'oral_other') {
+                            document.getElementById('oral-other-detail').style.display = 'block';
+                        }
+                    }
+                });
+            }
+            if (examData.dentalMissingDetail) {
+                document.getElementById('missing-detail-text').value = examData.dentalMissingDetail;
+                if (examData.missing === 'gt2' || examData.missing === 'denture') {
+                    document.getElementById('missing-detail').style.display = 'block';
+                }
+            }
+            if (examData.oralOtherText) {
+                document.getElementById('oral-other-text').value = examData.oralOtherText;
+            }
+        }
+        restoreData();
+    </script>
+</body>
+</html>

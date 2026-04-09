@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>辅助检查 - 入伍体检自测</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-top">
+            <a id="btn-back" href="dental.html" class="btn-back-header">← 返回</a>
+            <span class="header-step">8/9</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 88%"></div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="section-card fade-in">
+            <div class="section-header">
+                <span class="section-icon">🔬</span>
+                <div>
+                    <div class="section-name">辅助检查</div>
+                    <div class="section-desc">血常规、肝功、尿常规、胸片、心电图、超声等</div>
+                </div>
+            </div>
+            <div class="section-body">
+
+                <!-- 血常规 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>血常规结果</div>
+                    <div class="field-hint">血红蛋白、白细胞、血小板明显异常者可能不合格；如未检查可选择"未知"</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'bloodRoutine','normal')">
+                            <input type="radio" name="bloodRoutine" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">各项正常</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'bloodRoutine','anemia')">
+                            <input type="radio" name="bloodRoutine" value="anemia">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">血红蛋白偏低（贫血）——男性&lt;120g/L / 女性&lt;110g/L</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'bloodRoutine','wbc_high')">
+                            <input type="radio" name="bloodRoutine" value="wbc_high">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">白细胞明显升高（&gt;10×10⁹/L，提示感染/血液病）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'bloodRoutine','wbc_low')">
+                            <input type="radio" name="bloodRoutine" value="wbc_low">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">白细胞明显降低（&lt;4×10⁹/L）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'bloodRoutine','plt_abnormal')">
+                            <input type="radio" name="bloodRoutine" value="plt_abnormal">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">血小板明显异常（过高或过低）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'bloodRoutine','multiple_abnormal')">
+                            <input type="radio" name="bloodRoutine" value="multiple_abnormal">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">多项异常（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'bloodRoutine','unknown')">
+                            <input type="radio" name="bloodRoutine" value="unknown">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">未曾检查（需体检时检测）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 肝功能 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>肝功能 / 乙肝表面抗原</div>
+                    <div class="field-hint">乙肝表面抗原阳性（HBsAg+）为不合格；转氨酶（ALT/AST）超出正常2倍以上需关注</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'liverFunc','normal')">
+                            <input type="radio" name="liverFunc" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">肝功能正常，乙肝表面抗原阴性</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'liverFunc','alt_mild')">
+                            <input type="radio" name="liverFunc" value="alt_mild">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">转氨酶轻度升高（正常值1~2倍，ALT ≤80U/L）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'liverFunc','alt_high')">
+                            <input type="radio" name="liverFunc" value="alt_high">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">转氨酶明显升高（超过正常值2倍以上）（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'liverFunc','hbsag_positive')">
+                            <input type="radio" name="liverFunc" value="hbsag_positive">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">乙肝表面抗原阳性（HBsAg+）（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'liverFunc','hepatitis_active')">
+                            <input type="radio" name="liverFunc" value="hepatitis_active">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">肝炎活动期（未治愈）（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'liverFunc','unknown')">
+                            <input type="radio" name="liverFunc" value="unknown">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">未曾检查（需体检时检测）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 尿常规 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>尿常规结果</div>
+                    <div class="field-hint">尿蛋白、尿糖、红细胞、白细胞明显异常者须进一步检查</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'urineRoutine','normal')">
+                            <input type="radio" name="urineRoutine" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">各项正常</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'urineRoutine','protein')">
+                            <input type="radio" name="urineRoutine" value="protein">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">尿蛋白阳性（++及以上提示肾脏问题）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'urineRoutine','glucose')">
+                            <input type="radio" name="urineRoutine" value="glucose">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">尿糖阳性（需排除糖尿病）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'urineRoutine','rbc')">
+                            <input type="radio" name="urineRoutine" value="rbc">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">红细胞明显增多（血尿，需排除肾炎/结石）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'urineRoutine','wbc')">
+                            <input type="radio" name="urineRoutine" value="wbc">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">白细胞明显增多（泌尿系感染）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'urineRoutine','multiple')">
+                            <input type="radio" name="urineRoutine" value="multiple">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">多项异常（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'urineRoutine','unknown')">
+                            <input type="radio" name="urineRoutine" value="unknown">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">未曾检查（需体检时检测）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 血糖 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>空腹血糖</div>
+                    <div class="field-hint">空腹血糖 ≥7.0mmol/L 为糖尿病诊断标准，不合格；6.1~6.9mmol/L 为糖尿病前期，需关注</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'bloodSugar','normal')">
+                            <input type="radio" name="bloodSugar" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">正常（&lt;6.1mmol/L）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'bloodSugar','prediabetes')">
+                            <input type="radio" name="bloodSugar" value="prediabetes">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">糖尿病前期（6.1~6.9mmol/L，需控制）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'bloodSugar','diabetes')">
+                            <input type="radio" name="bloodSugar" value="diabetes">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">空腹血糖 ≥7.0mmol/L（糖尿病标准，不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'bloodSugar','unknown')">
+                            <input type="radio" name="bloodSugar" value="unknown">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">未曾检查（需体检时检测）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 毒品检测 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>毒品检测</div>
+                    <div class="field-hint">毒品检测阳性（吸毒史）为直接淘汰项</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'drugTest','negative')">
+                            <input type="radio" name="drugTest" value="negative" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">阴性（无吸毒史）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'drugTest','positive')">
+                            <input type="radio" name="drugTest" value="positive">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">阳性 / 有吸毒史（直接不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'drugTest','unknown')">
+                            <input type="radio" name="drugTest" value="unknown">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">未曾检查</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 胸部X光 / 肺部 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>胸部X光 / 肺部情况</div>
+                    <div class="field-hint">活动性肺结核、大量钙化灶、肺部明显异常影为不合格</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'chestXray','normal')">
+                            <input type="radio" name="chestXray" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'chestXray','tb_active')">
+                            <input type="radio" name="chestXray" value="tb_active">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">活动性肺结核（未治愈）（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'chestXray','tb_calcified')">
+                            <input type="radio" name="chestXray" value="tb_calcified">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">肺结核已治愈，钙化灶（需评估大小范围）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'chestXray','tb_severe_calcified')">
+                            <input type="radio" name="chestXray" value="tb_severe_calcified">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">大量钙化灶 / 严重钙化（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'chestXray','pneumonia_history')">
+                            <input type="radio" name="chestXray" value="pneumonia_history">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">既往肺炎史，已治愈，X光无异常</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'chestXray','other_abnormal')">
+                            <input type="radio" name="chestXray" value="other_abnormal">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">其他肺部明显异常（结节/斑片影等，需进一步确认）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'chestXray','unknown')">
+                            <input type="radio" name="chestXray" value="unknown">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">未曾检查（需体检时检测）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 心电图 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>心电图结果</div>
+                    <div class="field-hint">明显心律失常、心肌损害、传导阻滞等为不合格；轻度窦性心动过缓（50~59次/分）如生理性则不影响</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'ecg','normal')">
+                            <input type="radio" name="ecg" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">正常心电图</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'ecg','sinus_brady')">
+                            <input type="radio" name="ecg" value="sinus_brady">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">窦性心动过缓（50~59次/分，运动员可能属生理性）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'ecg','sinus_tachy')">
+                            <input type="radio" name="ecg" value="sinus_tachy">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">窦性心动过速（&gt;100次/分，静息状态）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'ecg','arrhythmia')">
+                            <input type="radio" name="ecg" value="arrhythmia">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">明显心律失常（频发早搏/房颤/室性心律失常）（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'ecg','block')">
+                            <input type="radio" name="ecg" value="block">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">传导阻滞（一度/二度/三度房室传导阻滞）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'ecg','myocardial')">
+                            <input type="radio" name="ecg" value="myocardial">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">心肌损害 / ST-T改变（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'ecg','unknown')">
+                            <input type="radio" name="ecg" value="unknown">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">未曾检查（需体检时检测）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 腹部超声 -->
+                <div class="field">
+                    <div class="field-label">腹部超声结果（可多选）</div>
+                    <div class="field-hint">单肾、肝肾弥漫性病变、结石超标、囊肿/血管瘤超标均须关注</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="us_normal">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">腹部超声正常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="us_single_kidney">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">单肾（先天或手术切除）（不合格）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="us_liver_diffuse">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">肝脏弥漫性病变（脂肪肝中度以上/肝硬化）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="us_kidney_diffuse">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">肾脏弥漫性病变（慢性肾炎/肾功能受损）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="us_kidney_stone">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">肾结石（&gt;1cm 或多发结石需关注）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="us_gallstone">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">胆囊结石 / 胆囊炎</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="us_liver_cyst">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">肝囊肿（&lt;5cm 且单发，一般不影响）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="us_liver_cyst_large">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">肝囊肿 ≥5cm / 多发囊肿（需评估）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="us_hemangioma">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">肝血管瘤（&gt;5cm 或影响肝功能需关注）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="us_spleen">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">脾脏肿大（超过正常范围）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)" id="us-other-toggle">
+                            <input type="checkbox" value="us_other">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">其他腹部异常</span>
+                        </label>
+                    </div>
+                    <div id="us-other-detail" style="display:none;margin-top:10px">
+                        <textarea id="us-other-text" class="other-input" rows="2" placeholder="请描述其他腹部超声异常..." oninput="saveData()"></textarea>
+                    </div>
+                </div>
+
+                <!-- 妇科超声（女性） -->
+                <div class="field" id="gynecology-us-field" style="display:none">
+                    <div class="field-label">妇科超声结果（女性，可多选）</div>
+                    <div class="field-hint">子宫肌瘤、卵巢囊肿、不明包块等须关注</div>
+                    <div class="checkbox-group" id="gynecology-us-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="gus_normal">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">妇科超声正常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="gus_myoma_small">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">子宫肌瘤（直径&lt;3cm，无症状）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="gus_myoma_large">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">子宫肌瘤（直径≥3cm 或多发）（需评估）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="gus_ovarian_cyst">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">卵巢囊肿（生理性/功能性，&lt;5cm）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="gus_ovarian_cyst_large">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">卵巢囊肿（&gt;5cm 或性质不明）（不合格）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="gus_unknown_mass">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">盆腔不明包块（待查）（不合格）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- HIV -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>HIV / 艾滋病</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'hiv','negative')">
+                            <input type="radio" name="hiv" value="negative" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">HIV 阴性</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'hiv','positive')">
+                            <input type="radio" name="hiv" value="positive">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">HIV 阳性（不合格）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'hiv','unknown')">
+                            <input type="radio" name="hiv" value="unknown">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">未曾检查</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="btn-next-wrap">
+            <button class="btn-next" onclick="goNext()">查看评估报告 →</button>
+        </div>
+    </div>
+
+    <script>
+        let examData = JSON.parse(localStorage.getItem('examData') || '{}');
+
+        // 根据性别调整返回按钮
+        if (examData.gender === 'female') {
+            document.getElementById('btn-back').href = 'gynecology.html';
+            document.getElementById('gynecology-us-field').style.display = 'block';
+        }
+
+        function selectRadio(el, key, val) {
+            document.querySelectorAll(`[name="${key}"]`).forEach(r => {
+                r.closest('.radio-item').classList.remove('selected');
+            });
+            el.classList.add('selected');
+            examData[key] = val;
+            saveData();
+        }
+
+        function toggleCheckbox(el, e) {
+            if (e) e.preventDefault();
+            el.classList.toggle('checked');
+            const input = el.querySelector('input');
+            input.checked = !input.checked;
+            if (input.value === 'us_other') {
+                document.getElementById('us-other-detail').style.display = input.checked ? 'block' : 'none';
+            }
+            saveData();
+        }
+
+        function saveData() {
+            const checkedUS = [...document.querySelectorAll('.checkbox-group .checkbox-item.checked')]
+                .map(el => el.querySelector('input').value);
+            examData.labUltrasound = checkedUS.filter(v => v.startsWith('us_'));
+            examData.labGynUS = checkedUS.filter(v => v.startsWith('gus_'));
+            examData.labUSOtherText = document.getElementById('us-other-text').value;
+            localStorage.setItem('examData', JSON.stringify(examData));
+        }
+
+        function goNext() {
+            saveData();
+            window.location.href = 'report.html';
+        }
+
+        // 恢复数据
+        function restoreData() {
+            ['bloodRoutine','liverFunc','urineRoutine','bloodSugar','drugTest','chestXray','ecg','hiv'].forEach(key => {
+                const val = examData[key];
+                if (val) {
+                    const radio = document.querySelector(`input[name="${key}"][value="${val}"]`);
+                    if (radio) {
+                        document.querySelectorAll(`[name="${key}"]`).forEach(r => r.closest('.radio-item').classList.remove('selected'));
+                        radio.closest('.radio-item').classList.add('selected');
+                    }
+                }
+            });
+            const allChecked = [...(examData.labUltrasound || []), ...(examData.labGynUS || [])];
+            allChecked.forEach(val => {
+                const cb = document.querySelector(`.checkbox-group input[value="${val}"]`);
+                if (cb) {
+                    cb.checked = true;
+                    cb.closest('.checkbox-item').classList.add('checked');
+                    if (val === 'us_other') {
+                        document.getElementById('us-other-detail').style.display = 'block';
+                    }
+                }
+            });
+            if (examData.labUSOtherText) {
+                document.getElementById('us-other-text').value = examData.labUSOtherText;
+            }
+        }
+        restoreData();
+    </script>
+</body>
+</html>

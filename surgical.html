@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>外科检查 - 入伍体检自测</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-top">
+            <a href="internal.html" class="btn-back-header">← 返回</a>
+            <span class="header-step">4/9</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 44%"></div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="section-card fade-in">
+            <div class="section-header">
+                <span class="section-icon">🦴</span>
+                <div>
+                    <div class="section-name">外科检查</div>
+                    <div class="section-desc">骨骼、皮肤、泌尿等全面评估</div>
+                </div>
+            </div>
+            <div class="section-body">
+
+                <!-- 颅脑 -->
+                <div class="field">
+                    <div class="field-label">颅脑情况</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'skull','none')">
+                            <input type="radio" name="skull" value="none" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">正常，无异常</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'skull','trauma')">
+                            <input type="radio" name="skull" value="trauma">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">有外伤史或手术史</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'skull','syndrome')">
+                            <input type="radio" name="skull" value="syndrome">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">脑外伤后综合征（头痛/头晕/记忆障碍等）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'skull','deform')">
+                            <input type="radio" name="skull" value="deform">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">颅骨明显畸形</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 颈部 -->
+                <div class="field">
+                    <div class="field-label">颈部情况（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neck_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neck_torticollis">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">斜颈</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neck_thyroid">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">甲状腺肿大</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neck_tumor">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">颈部肿瘤/肿块（面颈部良性肿瘤>1cm）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="neck_breast">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">乳腺肿瘤</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 骨关节 -->
+                <div class="field">
+                    <div class="field-label">骨关节病史（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="bone_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="bone_fracture">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">骨折史（已愈合）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="bone_disc">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">腰椎间盘突出</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="bone_ankylosing">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">强直性脊柱炎</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="bone_deform">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">关节畸形/功能障碍</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="bone_disloc">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">习惯性关节脱臼</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="bone_other">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">其他骨关节问题</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 骨关节其他填写 -->
+                <div class="field" id="bone-other-field" style="display:none">
+                    <div class="field-label">骨关节其他问题（请描述）</div>
+                    <input type="text" id="bone-other-text" placeholder="请填写具体情况" oninput="saveData()">
+                </div>
+
+                <!-- 肘关节 -->
+                <div class="field">
+                    <div class="field-label">肘关节</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'elbow','normal')">
+                            <input type="radio" name="elbow" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">正常</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'elbow','over15')">
+                            <input type="radio" name="elbow" value="over15">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">过伸 > 15°</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'elbow','valgus20')">
+                            <input type="radio" name="elbow" value="valgus20">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">外翻 > 20°</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 下肢 -->
+                <div class="field">
+                    <div class="field-label">下肢情况（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="leg_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="leg_unequal">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">双下肢不等长 > 2cm</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="leg_squat">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">下蹲不全（重度，膝关节弯曲受限明显）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="leg_varus">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">膝内翻（O型腿）超标</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="leg_valgus">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">膝外翻（X型腿）超标</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 手足 -->
+                <div class="field">
+                    <div class="field-label">手足情况（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="foot_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="foot_missing">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">指趾残缺或畸形</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="foot_flat">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">扁平足（足底弓完全消失）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 肿瘤 -->
+                <div class="field">
+                    <div class="field-label">肿瘤情况</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'tumor','none')">
+                            <input type="radio" name="tumor" value="none" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">无肿瘤</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'tumor','malignant')">
+                            <input type="radio" name="tumor" value="malignant">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">恶性肿瘤（含已手术）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'tumor','face_benign')">
+                            <input type="radio" name="tumor" value="face_benign">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">面颈部良性肿瘤 > 1cm</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'tumor','body_benign')">
+                            <input type="radio" name="tumor" value="body_benign">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">身体其他部位肿瘤 > 3cm</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'tumor','small')">
+                            <input type="radio" name="tumor" value="small">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">有良性肿瘤但较小（面颈≤1cm/其他≤3cm）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 瘢痕 -->
+                <div class="field">
+                    <div class="field-label">瘢痕情况（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="scar_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无瘢痕或正常小瘢痕</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="scar_constitution">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">瘢痕体质（轻微外伤即产生大量瘢痕）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="scar_face">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">面颈部瘢痕 > 3cm</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="scar_func">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">瘢痕影响肢体功能（关节活动受限等）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 纹身 -->
+                <div class="field">
+                    <div class="field-label">纹身/纹绣情况（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="tattoo_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无纹身</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="tattoo_face">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">面颈部纹身</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="tattoo_exposed_large">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">着体能服时裸露部位纹身 > 3cm</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="tattoo_body_large">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">其他部位纹身 > 10cm</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)" id="tattoo_male_item">
+                            <input type="checkbox" value="tattoo_male_makeup">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">男性：纹眉/纹眼线/纹唇</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)" id="tattoo_female_item">
+                            <input type="checkbox" value="tattoo_female_lip">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">女性：纹唇（超出唇线范围）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="tattoo_small">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">有纹身但较小（着装覆盖且≤标准尺寸）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 血管 -->
+                <div class="field">
+                    <div class="field-label">血管情况（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="varix_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="varix_leg_mild">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">轻度下肢静脉曲张</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="varix_leg_severe">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">中重度下肢静脉曲张</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)" id="varix_male_item">
+                            <input type="checkbox" value="varix_varicocele_mild">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">精索静脉曲张（轻度）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)" id="varix_varicocele_item">
+                            <input type="checkbox" value="varix_varicocele_severe">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">精索静脉曲张（中重度）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 胸腹手术史 -->
+                <div class="field">
+                    <div class="field-label">胸腹手术及消化道病史（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="surg_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="surg_hernia">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">疝气（未手术）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="surg_fistula">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">肛瘘（未治愈）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="surg_hemorrhoid">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">痔疮（内痔Ⅲ度及以上/混合痔脱出）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="surg_appendix_recent">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">阑尾炎手术未满3个月</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="surg_hernia_recent">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">疝修补术未满6个月</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 泌尿生殖（男性） -->
+                <div class="field" id="urogenital_male_field">
+                    <div class="field-label">泌尿生殖情况（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="uro_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="uro_malform">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">生殖器官畸形（尿道下裂等）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="uro_single_testis">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">单睾（一侧睾丸缺如）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="uro_cryptorchid">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">隐睾（睾丸未降入阴囊）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="uro_hydrocele">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">鞘膜积液（超过鸡蛋大小）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 腋臭 -->
+                <div class="field">
+                    <div class="field-label">腋臭情况</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'axillary','none')">
+                            <input type="radio" name="axillary" value="none" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">无腋臭</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'axillary','mild')">
+                            <input type="radio" name="axillary" value="mild">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">轻度（自知，他人需近距离才能察觉）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'axillary','severe')">
+                            <input type="radio" name="axillary" value="severe">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">重度（他人明显能察觉到）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 皮肤病 -->
+                <div class="field">
+                    <div class="field-label">皮肤疾病（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="skin_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无皮肤疾病</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="skin_tinea">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">头癣（头皮真菌感染）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="skin_eczema">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">泛发性湿疹（广泛分布全身）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="skin_psoriasis">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">银屑病（牛皮癣）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="skin_vitiligo_large">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">白癜风（暴露部位或面积较大）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="skin_infect">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">传染性皮肤病（疥疮/传染性软疣等）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="skin_other">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">其他皮肤问题</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 皮肤其他 -->
+                <div class="field" id="skin-other-field" style="display:none">
+                    <div class="field-label">其他皮肤问题（请描述）</div>
+                    <input type="text" id="skin-other-text" placeholder="请填写具体情况" oninput="saveData()">
+                </div>
+
+                <!-- 性传播疾病 -->
+                <div class="field">
+                    <div class="field-label">性传播疾病史</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'std','none')">
+                            <input type="radio" name="std" value="none" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">无</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'std','has')">
+                            <input type="radio" name="std" value="has">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">有（淋病/梅毒/尖锐湿疣等）</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="page-nav">
+        <a href="internal.html" class="btn-prev">← 返回</a>
+        <a href="hearing.html" class="btn-next">下一步 →</a>
+    </div>
+
+    <script>
+        const savedData = JSON.parse(localStorage.getItem('examData') || '{}');
+        const gender = savedData.gender || 'male';
+
+        // 根据性别显示/隐藏特定选项
+        function applyGenderDisplay() {
+            const isMale = gender === 'male';
+            // 男性纹眉眼唇
+            if (document.getElementById('tattoo_male_item')) {
+                document.getElementById('tattoo_male_item').style.display = isMale ? 'flex' : 'none';
+            }
+            // 女性纹唇
+            if (document.getElementById('tattoo_female_item')) {
+                document.getElementById('tattoo_female_item').style.display = isMale ? 'none' : 'flex';
+            }
+            // 男性精索静脉曲张
+            if (document.getElementById('varix_male_item')) {
+                document.getElementById('varix_male_item').style.display = isMale ? 'flex' : 'none';
+            }
+            if (document.getElementById('varix_varicocele_item')) {
+                document.getElementById('varix_varicocele_item').style.display = isMale ? 'flex' : 'none';
+            }
+            // 男性泌尿生殖
+            if (document.getElementById('urogenital_male_field')) {
+                document.getElementById('urogenital_male_field').style.display = isMale ? 'block' : 'none';
+            }
+        }
+        applyGenderDisplay();
+
+        // 恢复保存的单选
+        function setRadio(name, value) {
+            const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+            if (el) {
+                el.checked = true;
+                document.querySelectorAll(`input[name="${name}"]`).forEach(inp => {
+                    inp.closest('.radio-item').classList.toggle('selected', inp.checked);
+                });
+            }
+        }
+
+        // 恢复保存的多选
+        function restoreCheckboxes(keyName) {
+            const vals = savedData[keyName] || [];
+            vals.forEach(v => {
+                const cb = document.querySelector(`input[value="${v}"]`);
+                if (cb && cb.type === 'checkbox') {
+                    cb.checked = true;
+                    cb.closest('.checkbox-item').classList.add('selected');
+                }
+            });
+        }
+
+        if (savedData.skull) setRadio('skull', savedData.skull);
+        if (savedData.elbow) setRadio('elbow', savedData.elbow);
+        if (savedData.tumor) setRadio('tumor', savedData.tumor);
+        if (savedData.axillary) setRadio('axillary', savedData.axillary);
+        if (savedData.std) setRadio('std', savedData.std);
+        restoreCheckboxes('neckIssues');
+        restoreCheckboxes('boneIssues');
+        restoreCheckboxes('legIssues');
+        restoreCheckboxes('footIssues');
+        restoreCheckboxes('scarIssues');
+        restoreCheckboxes('tattooIssues');
+        restoreCheckboxes('varixIssues');
+        restoreCheckboxes('surgIssues');
+        restoreCheckboxes('uroIssues');
+        restoreCheckboxes('skinIssues');
+        if (savedData.boneOtherText) document.getElementById('bone-other-text').value = savedData.boneOtherText;
+        if (savedData.skinOtherText) document.getElementById('skin-other-text').value = savedData.skinOtherText;
+
+        // 检查是否选了"其他"
+        function checkOtherVisible() {
+            const boneOther = document.querySelector('input[value="bone_other"]');
+            const skinOther = document.querySelector('input[value="skin_other"]');
+            document.getElementById('bone-other-field').style.display = (boneOther && boneOther.checked) ? 'block' : 'none';
+            document.getElementById('skin-other-field').style.display = (skinOther && skinOther.checked) ? 'block' : 'none';
+        }
+        checkOtherVisible();
+
+        function selectRadio(el, name, value) {
+            el.parentElement.querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function toggleCheckbox(el, e) {
+            if (e) e.preventDefault();
+            el.classList.toggle('selected');
+            el.querySelector('input').checked = el.classList.contains('selected');
+            checkOtherVisible();
+            saveData();
+        }
+
+        function getCheckedValues(groupSelector) {
+            const vals = [];
+            document.querySelectorAll(`${groupSelector} input[type="checkbox"]:checked`).forEach(cb => vals.push(cb.value));
+            return vals;
+        }
+
+        function saveData() {
+            const data = {
+                skull: document.querySelector('input[name="skull"]:checked')?.value || 'none',
+                neckIssues: getCheckedValues('.field:nth-child(2) .checkbox-group'),
+                boneIssues: getCheckedValues('.field:nth-child(3) .checkbox-group'),
+                boneOtherText: document.getElementById('bone-other-text').value,
+                elbow: document.querySelector('input[name="elbow"]:checked')?.value || 'normal',
+                legIssues: getCheckedValues('.field:nth-child(6) .checkbox-group'),
+                footIssues: getCheckedValues('.field:nth-child(7) .checkbox-group'),
+                tumor: document.querySelector('input[name="tumor"]:checked')?.value || 'none',
+                scarIssues: getCheckedValues('.field:nth-child(9) .checkbox-group'),
+                tattooIssues: getCheckedValues('.field:nth-child(10) .checkbox-group'),
+                varixIssues: getCheckedValues('.field:nth-child(11) .checkbox-group'),
+                surgIssues: getCheckedValues('.field:nth-child(12) .checkbox-group'),
+                uroIssues: getCheckedValues('#urogenital_male_field .checkbox-group'),
+                axillary: document.querySelector('input[name="axillary"]:checked')?.value || 'none',
+                skinIssues: getCheckedValues('.field:nth-child(15) .checkbox-group'),
+                skinOtherText: document.getElementById('skin-other-text').value,
+                std: document.querySelector('input[name="std"]:checked')?.value || 'none',
+            };
+            localStorage.setItem('examData', JSON.stringify({...savedData, ...data}));
+        }
+
+        document.querySelectorAll('input[type="radio"]').forEach(el => el.addEventListener('change', saveData));
+    </script>
+</body>
+</html>

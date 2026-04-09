@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>耳鼻咽喉科 - 入伍体检自测</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-top">
+            <a href="surgical.html" class="btn-back-header">← 返回</a>
+            <span class="header-step">5/9</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 55%"></div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="section-card fade-in">
+            <div class="section-header">
+                <span class="section-icon">👂</span>
+                <div>
+                    <div class="section-name">耳鼻咽喉科</div>
+                    <div class="section-desc">听力、嗅觉、鼻咽喉全面评估</div>
+                </div>
+            </div>
+            <div class="section-body">
+
+                <!-- 听力 -->
+                <div class="field">
+                    <div class="field-label"><span class="req">*</span>双侧耳语听力测试</div>
+                    <div class="field-hint">请让同伴在5米外以耳语声说话，您能听清吗？</div>
+                    <div class="radio-group" style="margin-top:12px">
+                        <label class="radio-item selected" onclick="selectRadio(this,'hearing','both5m')">
+                            <input type="radio" name="hearing" value="both5m" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">双侧均能听清5米耳语</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'hearing','one3m')">
+                            <input type="radio" name="hearing" value="one3m">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">一侧5米，另一侧3~4米（边缘）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'hearing','below3m')">
+                            <input type="radio" name="hearing" value="below3m">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">任一侧低于3米（不合格）</span>
+                        </label>
+                    </div>
+                    <div class="field-hint" style="margin-top:6px">标准：双侧耳语均≥5米合格</div>
+                </div>
+
+                <!-- 眩晕 -->
+                <div class="field">
+                    <div class="field-label">是否有眩晕症/梅尼埃病？</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'vertigo','none')">
+                            <input type="radio" name="vertigo" value="none" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">无</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'vertigo','has')">
+                            <input type="radio" name="vertigo" value="has">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">有（确诊眩晕症或梅尼埃病）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 耳部 -->
+                <div class="field">
+                    <div class="field-label">耳部情况（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="ear_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="ear_malform">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">耳廓明显畸形/缺损</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="ear_canal">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">外耳道闭锁/严重狭窄</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="ear_otitis">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">慢性中耳炎（长期流脓/反复发作）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="ear_perforation">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">鼓膜穿孔（未愈合）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 嗅觉 -->
+                <div class="field">
+                    <div class="field-label">嗅觉情况</div>
+                    <div class="radio-group">
+                        <label class="radio-item selected" onclick="selectRadio(this,'smell','normal')">
+                            <input type="radio" name="smell" value="normal" checked>
+                            <span class="radio-dot"></span>
+                            <span class="option-text">正常，能辨别酒精/醋/酱油等气味</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'smell','dull')">
+                            <input type="radio" name="smell" value="dull">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">嗅觉迟钝（能辨别但需靠近）</span>
+                        </label>
+                        <label class="radio-item" onclick="selectRadio(this,'smell','loss')">
+                            <input type="radio" name="smell" value="loss">
+                            <span class="radio-dot"></span>
+                            <span class="option-text">嗅觉丧失（不能辨别任何气味）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 鼻部 -->
+                <div class="field">
+                    <div class="field-label">鼻部疾病（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="nose_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="nose_perforation">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">鼻中隔穿孔</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="nose_rhinitis">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">重度慢性鼻炎（严重鼻塞/影响呼吸）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="nose_polyp">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">鼻息肉</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="nose_sinusitis">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">严重鼻窦炎（多发/影响功能）</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 咽喉 -->
+                <div class="field">
+                    <div class="field-label">咽喉疾病（可多选）</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="throat_none">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">无异常</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="throat_tonsil2">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">慢性扁桃体炎Ⅱ度以上肥大（超过腭弓中线）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="throat_osa">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">严重睡眠呼吸暂停综合征（鼾症）</span>
+                        </label>
+                        <label class="checkbox-item" onclick="toggleCheckbox(this,event)">
+                            <input type="checkbox" value="throat_other">
+                            <span class="check-box">✓</span>
+                            <span class="option-text">其他咽喉疾病</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 咽喉其他 -->
+                <div class="field" id="throat-other-field" style="display:none">
+                    <div class="field-label">其他咽喉疾病（请描述）</div>
+                    <input type="text" id="throat-other-text" placeholder="请填写具体情况" oninput="saveData()">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="page-nav">
+        <a href="surgical.html" class="btn-prev">← 返回</a>
+        <a href="dental.html" class="btn-next">下一步 →</a>
+    </div>
+
+    <script>
+        const savedData = JSON.parse(localStorage.getItem('examData') || '{}');
+
+        function setRadio(name, value) {
+            const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+            if (el) {
+                el.checked = true;
+                document.querySelectorAll(`input[name="${name}"]`).forEach(inp => {
+                    inp.closest('.radio-item').classList.toggle('selected', inp.checked);
+                });
+            }
+        }
+
+        function restoreCheckboxes(vals) {
+            (vals || []).forEach(v => {
+                const cb = document.querySelector(`input[value="${v}"]`);
+                if (cb && cb.type === 'checkbox') {
+                    cb.checked = true;
+                    cb.closest('.checkbox-item').classList.add('selected');
+                }
+            });
+        }
+
+        if (savedData.hearing) setRadio('hearing', savedData.hearing);
+        if (savedData.vertigo) setRadio('vertigo', savedData.vertigo);
+        if (savedData.smellCondition) setRadio('smell', savedData.smellCondition);
+        restoreCheckboxes(savedData.earIssues);
+        restoreCheckboxes(savedData.noseIssues);
+        restoreCheckboxes(savedData.throatIssues);
+        if (savedData.throatOtherText) document.getElementById('throat-other-text').value = savedData.throatOtherText;
+
+        function checkOtherVisible() {
+            const throatOther = document.querySelector('input[value="throat_other"]');
+            document.getElementById('throat-other-field').style.display = (throatOther && throatOther.checked) ? 'block' : 'none';
+        }
+        checkOtherVisible();
+
+        function selectRadio(el, name, value) {
+            el.parentElement.querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            saveData();
+        }
+
+        function toggleCheckbox(el, e) {
+            if (e) e.preventDefault();
+            el.classList.toggle('selected');
+            el.querySelector('input').checked = el.classList.contains('selected');
+            checkOtherVisible();
+            saveData();
+        }
+
+        function getCheckedValues(selector) {
+            const vals = [];
+            document.querySelectorAll(`${selector} input[type="checkbox"]:checked`).forEach(cb => vals.push(cb.value));
+            return vals;
+        }
+
+        function saveData() {
+            const data = {
+                hearing: document.querySelector('input[name="hearing"]:checked')?.value || 'both5m',
+                vertigo: document.querySelector('input[name="vertigo"]:checked')?.value || 'none',
+                smellCondition: document.querySelector('input[name="smell"]:checked')?.value || 'normal',
+                earIssues: getCheckedValues('.field:nth-child(3) .checkbox-group'),
+                noseIssues: getCheckedValues('.field:nth-child(5) .checkbox-group'),
+                throatIssues: getCheckedValues('.field:nth-child(6) .checkbox-group'),
+                throatOtherText: document.getElementById('throat-other-text').value,
+            };
+            localStorage.setItem('examData', JSON.stringify({...savedData, ...data}));
+        }
+    </script>
+</body>
+</html>

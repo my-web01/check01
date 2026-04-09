@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>体检评估报告 - 入伍体检自测</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="report-header">
+        <div class="report-icon">📋</div>
+        <div class="report-title">体检评估报告</div>
+        <div class="report-date" id="report-date"></div>
+    </div>
+
+    <div class="report-body">
+        <!-- 用户基本信息 -->
+        <div class="report-user-info fade-in" id="user-info"></div>
+
+        <div class="score-card fade-in" id="score-card">
+            <div class="score-label">综合评估结果</div>
+            <div class="score-ring" id="score-ring">
+                <span id="score-emoji">🎯</span>
+            </div>
+            <div class="score-verdict" id="score-verdict">评估中...</div>
+            <div class="score-tip" id="score-tip"></div>
+        </div>
+
+        <!-- 身高体重评估 -->
+        <div class="risk-section fade-in" id="bmi-section">
+            <div class="risk-section-title">📏 身高体重评估</div>
+            <div id="bmi-detail"></div>
+        </div>
+
+        <div class="risk-section fade-in">
+            <div class="risk-section-title">📊 各科室评估结果</div>
+            <div class="dim-grid" id="dim-grid"></div>
+        </div>
+
+        <div class="risk-section fade-in" id="risk-section">
+            <div class="risk-section-title">⚠️ 不合格 / 风险预警项</div>
+            <div id="risk-list"></div>
+        </div>
+
+        <div class="risk-section fade-in" id="warn-section">
+            <div class="risk-section-title">💡 注意事项</div>
+            <div id="warn-list"></div>
+        </div>
+
+        <div class="plan-section fade-in" id="plan-section">
+            <div class="risk-section-title" style="margin-bottom:16px">📅 30天个性化备战计划</div>
+            <div class="plan-tabs">
+                <button class="plan-tab active" onclick="switchTab('exercise',this)">🏃 运动</button>
+                <button class="plan-tab" onclick="switchTab('diet',this)">🥗 饮食</button>
+                <button class="plan-tab" onclick="switchTab('sleep',this)">😴 作息</button>
+            </div>
+            <div class="plan-content active" id="tab-exercise"></div>
+            <div class="plan-content" id="tab-diet"></div>
+            <div class="plan-content" id="tab-sleep"></div>
+        </div>
+
+        <div class="disclaimer">
+            ⚠️ 本测评依据《应征公民体格检查标准》整理，仅供参考，不作为正式体检依据。<br>
+            正式入伍体检须经军队指定医疗机构检测，以官方结论为准。
+        </div>
+
+        <div class="report-actions">
+            <a href="index.html" class="btn-retry" onclick="restartTest()">🔄 重新测评</a>
+        </div>
+    </div>
+
+    <script>
+        const data = JSON.parse(localStorage.getItem('examData') || '{}');
+        let failItems = [];   // 不合格项
+        let warnItems = [];   // 注意项
+        let details = [];     // 各科室评估结果
+
+        const genderNames = { male: '男性', female: '女性' };
+        const specialTypeNames = { normal: '普通兵', special: '条件兵' };
+
+        document.getElementById('report-date').textContent = `评测时间：${new Date().toLocaleDateString('zh-CN')}`;
+
+        // ===================== 辅助函数 =====================
+        function addFail(text) { failItems.push(text); }
+        function addWarn(text) { warnItems.push(text); }
+
+        function pushDetail(name, icon, pass, statusOverride, text) {
+            const status = statusOverride || (pass ? 'pass' : 'fail');
+            details.push({ name, icon, pass, status, text });
+        }
+
+        // ===================== 用户信息 =====================
+        function renderUserInfo() {
+            const gender = data.gender || 'male';
+            const special = data.special || 'normal';
+            const genderName = genderNames[gender] || '男性';
+            const typeName = specialTypeNames[special] || '普通兵';
+            document.getElementById('user-info').innerHTML = `
+                <span class="info-tag gender-${gender}">${genderName}</span>
+                <span class="info-tag">${typeName}</span>
+                <span class="info-tag">${data.height || '--'}cm</span>
+                <span class="info-tag">${data.weight || '--'}kg</span>
+                <span class="info-tag">${data.age || '--'}岁</span>
+            `;
+        }
+        renderUserInfo();
+
+        // ===================== 一、身高体重 =====================
+        function evalHeightWeight() {
+            const gender = data.gender || 'male';
+            const special = data.special || 'normal';
+            const height = parseInt(data.height) || 0;
+            const weight = parseInt(data.weight) || 0;
+
+            let heightPass = true, bmiPass = true, heightText = '', bmiText = '';
+
+            // 身高标准
+            const hStd = (gender === 'female')
+                ? (special === 'special' ? 160 : 158)
+                : (special === 'special' ? 162 : 160);
+
+            if (height >= hStd) {
+                heightText = `身高 ${height}cm ✓（≥${hStd}cm）`;
+            } else {
+                heightPass = false;
+                heightText = `身高 ${height}cm ✗ 不合格（需≥${hStd}cm）`;
+                addFail(`身高不足 ${height}cm，需≥${hStd}cm`);
+            }
+
+            // BMI
+            const bmiMin = (gender === 'female') ? 17 : 17.5;
+            const bmiMax = (gender === 'female') ? 24 : (special === 'special' ? 27 : 30);
+            const bmi = (height > 0 && weight > 0) ? (weight / ((height / 100) ** 2)).toFixed(1) : 0;
+
+            if (bmi >= bmiMin && bmi <= bmiMax) {
+                bmiText = `BMI ${bmi} ✓（${bmiMin}~${bmiMax}）`;
+            } else if (bmi < bmiMin) {
+                bmiPass = false;
+                bmiText = `BMI ${bmi} ✗ 偏低（需≥${bmiMin}）`;
+                addFail(`体重偏低（BMI ${bmi}）`);
+            } else {
+                bmiPass = false;
+                bmiText = `BMI ${bmi} ✗ 超标（需≤${bmiMax}）`;
+                addFail(`体重超标（BMI ${bmi}）`);
+            }
+
+            // 空腹血糖
+            const sugar = data.bloodSugar || 'normal';
+            let sugarText = '';
+            if (sugar === 'diabetes') {
+                bmiPass = false;
+                sugarText = '空腹血糖≥7.0mmol/L（糖尿病，不合格）';
+                addFail('空腹血糖≥7.0mmol/L，达到糖尿病诊断标准');
+            } else if (sugar === 'prediabetes') {
+                sugarText = '空腹血糖6.1~6.9mmol/L（需控制）';
+                addWarn('空腹血糖偏高，需控制饮食并复查');
+            }
+
+            document.getElementById('bmi-detail').innerHTML = `
+                <div class="detail-item ${heightPass ? 'pass' : 'fail'}">
+                    <span class="detail-name">📏 身高</span>
+                    <span class="detail-result">${heightText}</span>
+                </div>
+                <div class="detail-item ${bmiPass ? 'pass' : 'fail'}">
+                    <span class="detail-name">⚖️ BMI</span>
+                    <span class="detail-result">${bmiText}</span>
+                </div>
+                ${sugarText ? `<div class="detail-item ${sugar === 'diabetes' ? 'fail' : 'warn'}">
+                    <span class="detail-name">🩸 血糖</span>
+                    <span class="detail-result">${sugarText}</span>
+                </div>` : ''}
+            `;
+            pushDetail('身高体重', '📏', heightPass && bmiPass, null, heightPass && bmiPass ? '合格' : '见详细评估');
+        }
+        evalHeightWeight();
+
+        // ===================== 二、外科 =====================
+        function evalSurgical() {
+            const issues = [], warns = [];
+
+            // 颅脑
+            const skull = data.skull || 'none';
+            if (skull === 'syndrome') { issues.push('脑外伤后综合征（不合格）'); }
+            else if (skull === 'trauma') { warns.push('有颅脑外伤/手术史，需提供诊断证明'); }
+            else if (skull === 'deform') { issues.push('颅骨明显畸形'); }
+
+            // 颈部
+            const neck = data.neckIssues || [];
+            if (neck.includes('neck_torticollis')) issues.push('斜颈');
+            if (neck.includes('neck_thyroid')) warns.push('甲状腺肿大（需明确性质）');
+            if (neck.includes('neck_tumor')) issues.push('颈部肿瘤/肿块>1cm');
+            if (neck.includes('neck_breast_tumor')) warns.push('乳腺肿瘤（需明确性质）');
+
+            // 骨关节
+            const bone = data.boneIssues || [];
+            if (bone.includes('bone_fracture_healed')) warns.push('骨折史（已愈合，需确认功能正常）');
+            if (bone.includes('bone_disc')) issues.push('腰椎间盘突出（影响功能）');
+            if (bone.includes('bone_ankylosing')) issues.push('强直性脊柱炎');
+            if (bone.includes('bone_joint_deform')) issues.push('关节畸形');
+            if (bone.includes('bone_dislocation')) issues.push('习惯性脱臼');
+
+            // 肘关节
+            const elbow = data.elbow || 'normal';
+            if (elbow === 'over15') issues.push('肘关节过伸>15°');
+            else if (elbow === 'valgus20') issues.push('肘外翻>20°');
+            else if (elbow === 'mild') warns.push('肘关节轻度异常（过伸≤15°或外翻≤20°）');
+
+            // 下肢
+            const leg = data.legIssues || [];
+            if (leg.includes('leg_unequal2cm')) issues.push('下肢不等长>2cm');
+            if (leg.includes('leg_squat')) issues.push('下蹲不全');
+            if (leg.includes('leg_varus')) issues.push('膝内翻/外翻超标');
+            if (leg.includes('leg_flatfoot_severe')) issues.push('扁平足（足弓完全消失）');
+            if (leg.includes('leg_flatfoot_mild')) warns.push('轻度扁平足');
+
+            // 手足
+            const hand = data.handIssues || [];
+            if (hand.includes('hand_missing')) issues.push('指趾残缺/畸形');
+            if (hand.includes('hand_poly')) warns.push('多指/趾（需确认功能影响）');
+
+            // 肿瘤
+            const tumor = data.tumorSituation || 'none';
+            if (tumor === 'malignant') issues.push('恶性肿瘤（不合格）');
+            else if (tumor === 'face_benign') issues.push('面颈部良性肿瘤>1cm');
+            else if (tumor === 'body_large') issues.push('体部良性肿瘤>3cm（影响功能）');
+            else if (tumor === 'body_small') warns.push('体部良性肿瘤≤3cm（需确认不影响功能）');
+
+            // 瘢痕
+            const scar = data.scarSituation || 'none';
+            if (scar === 'keloid') issues.push('瘢痕体质');
+            else if (scar === 'face_large') issues.push('面颈部瘢痕>3cm');
+            else if (scar === 'function_affected') issues.push('瘢痕影响功能/关节活动');
+            else if (scar === 'face_small') warns.push('面颈部瘢痕≤3cm（边缘，需确认）');
+
+            // 胸腹手术
+            const surgery = data.surgeryHistory || [];
+            if (surgery.includes('surg_hernia_active')) issues.push('疝气（未手术）');
+            if (surgery.includes('surg_hernia_recent')) issues.push('疝气术后未满1年');
+            if (surgery.includes('surg_fistula')) issues.push('肛瘘');
+            if (surgery.includes('surg_piles_severe')) issues.push('重度痔疮（不合格）');
+            if (surgery.includes('surg_appendix_recent')) warns.push('阑尾炎术后（需确认满足时限）');
+
+            // 泌尿生殖（男性）
+            if (data.gender !== 'female') {
+                const uro = data.urologyIssues || [];
+                if (uro.includes('uro_deform')) issues.push('生殖器官畸形');
+                if (uro.includes('uro_single_testis')) issues.push('单睾/隐睾');
+                if (uro.includes('uro_hydrocele_large')) issues.push('鞘膜积液（明显影响）');
+                if (uro.includes('uro_varicocele_severe')) issues.push('重度精索/下肢静脉曲张');
+                if (uro.includes('uro_varicocele_mid')) warns.push('中度精索静脉曲张（需评估）');
+            }
+
+            // 腋臭
+            const odor = data.axillaryOdor || 'none';
+            if (odor === 'severe') issues.push('重度腋臭');
+            else if (odor === 'moderate') warns.push('中度腋臭（需评估）');
+
+            // 皮肤病
+            const skin = data.skinDisease || [];
+            if (skin.includes('skin_tinea_capitis')) issues.push('头癣（传染性，不合格）');
+            if (skin.includes('skin_eczema_widespread')) issues.push('泛发性湿疹');
+            if (skin.includes('skin_psoriasis')) issues.push('银屑病（牛皮癣，不合格）');
+            if (skin.includes('skin_vitiligo_large')) issues.push('白癜风（面颈或超标）');
+            if (skin.includes('skin_std')) issues.push('性传播疾病（淋病/梅毒/尖锐湿疣等）');
+            if (skin.includes('skin_eczema_local')) warns.push('局限性湿疹（需治愈）');
+            if (skin.includes('skin_vitiligo_small')) warns.push('白癜风（小面积，需评估）');
+
+            // 纹身
+            const tattoo = data.tattooSituation || 'none';
+            if (tattoo === 'face_neck') issues.push('面颈部纹身（不合格）');
+            else if (tattoo === 'exposed_large') issues.push('裸露部位纹身>3cm（不合格）');
+            else if (tattoo === 'body_large') issues.push('隐蔽部位纹身>10cm（不合格）');
+            else if (tattoo === 'brow_eye_lip_male' && data.gender !== 'female') issues.push('男性纹眉/纹眼/纹唇（不合格）');
+            else if (tattoo === 'lip_female' && data.gender === 'female') issues.push('女性纹唇（不合格）');
+            else if (tattoo === 'small_hidden') warns.push('纹身（隐蔽部位≤10cm，需确认符合标准）');
+
+            const pass = issues.length === 0;
+            const status = issues.length > 0 ? 'fail' : (warns.length > 0 ? 'warn' : 'pass');
+            issues.forEach(i => addFail(`外科：${i}`));
+            warns.forEach(w => addWarn(`外科：${w}`));
+            pushDetail('外科', '🦴', pass, status, pass ? (warns.length > 0 ? '合格（有注意项）' : '合格') : `${issues.length}项不合格`);
+        }
+        evalSurgical();
+
+        // ===================== 三、内科 =====================
+        function evalInternal() {
+            const issues = [], warns = [];
+
+            // 血压
+            const sys = parseInt(data.bpSys || 120);
+            const dia = parseInt(data.bpDia || 80);
+            if (sys < 90 || dia < 60) {
+                issues.push(`血压偏低（${sys}/${dia}mmHg）`);
+            } else if (sys >= 140 || dia >= 90) {
+                issues.push(`高血压（${sys}/${dia}mmHg，需≤140/90）`);
+            } else if (sys >= 130 || dia >= 85) {
+                warns.push(`血压偏高（${sys}/${dia}mmHg，需控制）`);
+            }
+
+            // 心率
+            const hr = parseInt(data.heartRate || 75);
+            if (hr < 50 || hr > 110) {
+                issues.push(`心率异常（${hr}次/分，需50~110次/分）`);
+            } else if ((hr >= 50 && hr <= 59) || (hr >= 101 && hr <= 110)) {
+                warns.push(`心率边缘值（${hr}次/分），如为运动员生理性则可通过，建议说明`);
+            }
+
+            // 心脏
+            const heart = data.heartCondition || [];
+            if (heart.includes('heart_organic')) issues.push('器质性心脏病');
+            if (heart.includes('heart_dextrocardia')) issues.push('右位心脏');
+            if (heart.includes('heart_congenital')) issues.push('先天性心脏病（未手术）');
+            if (heart.includes('heart_murmur')) warns.push('心脏杂音（需明确病因）');
+
+            // 呼吸系统
+            const resp = data.respiratoryIssues || [];
+            if (resp.includes('resp_bronchitis')) issues.push('慢性支气管炎');
+            if (resp.includes('resp_asthma')) issues.push('哮喘（活动期）');
+            if (resp.includes('resp_pneumothorax')) issues.push('自发性气胸史（复发风险）');
+            if (resp.includes('resp_asthma_remission')) warns.push('哮喘（缓解期，需说明）');
+
+            // 胃肠肝胆
+            const gastro = data.gastroIssues || [];
+            if (gastro.includes('gastro_severe')) issues.push('严重慢性胃肠病（影响功能）');
+            if (gastro.includes('gastro_liver_large')) issues.push('肝脾肿大超标');
+            if (gastro.includes('gastro_mild')) warns.push('慢性胃炎/胃溃疡（症状轻）');
+
+            // 内分泌代谢
+            const endo = data.endocrineIssues || [];
+            if (endo.includes('endo_diabetes')) issues.push('糖尿病（已确诊）');
+            if (endo.includes('endo_hyperthyroid')) issues.push('甲亢（活动期）');
+            if (endo.includes('endo_hypothyroid')) warns.push('甲减（需用药控制）');
+            if (endo.includes('endo_obesity')) warns.push('内分泌性肥胖（需减重）');
+
+            // 传染病
+            const infect = data.infectiousDisease || [];
+            if (infect.includes('inf_hbsag')) issues.push('乙肝表面抗原阳性（HBsAg+）');
+            if (infect.includes('inf_hiv')) issues.push('HIV阳性');
+            if (infect.includes('inf_tb_active')) issues.push('结核病（活动期/未治愈）');
+            if (infect.includes('inf_hepatitis_active')) issues.push('肝炎（活动期/未治愈）');
+            if (infect.includes('inf_tb_healed')) warns.push('结核病已治愈（需提供证明）');
+            if (infect.includes('inf_hepatitis_healed')) warns.push('肝炎已治愈（需提供证明）');
+
+            // 神经精神
+            const neuro = data.neuroIssues || [];
+            if (neuro.includes('neuro_epilepsy')) issues.push('癫痫（不合格）');
+            if (neuro.includes('neuro_schizophrenia')) issues.push('精神分裂症（不合格）');
+            if (neuro.includes('neuro_depression')) issues.push('抑郁症（确诊）');
+            if (neuro.includes('neuro_sleepwalk')) issues.push('梦游症');
+            if (neuro.includes('neuro_enuresis')) issues.push('遗尿症（18岁以上）');
+            if (neuro.includes('neuro_stutter_severe')) issues.push('严重口吃（明显影响交流）');
+            if (neuro.includes('neuro_anxiety')) warns.push('焦虑症（需说明是否用药）');
+            if (neuro.includes('neuro_stutter_mild')) warns.push('轻度口吃（需确认交流影响程度）');
+
+            const pass = issues.length === 0;
+            const status = issues.length > 0 ? 'fail' : (warns.length > 0 ? 'warn' : 'pass');
+            issues.forEach(i => addFail(`内科：${i}`));
+            warns.forEach(w => addWarn(`内科：${w}`));
+            pushDetail('内科', '🫀', pass, status, pass ? (warns.length > 0 ? '合格（有注意项）' : '合格') : `${issues.length}项不合格`);
+        }
+        evalInternal();
+
+        // ===================== 四、耳鼻咽喉科 =====================
+        function evalENT() {
+            const issues = [], warns = [];
+
+            // 听力
+            const hearing = data.hearing || 'both5m';
+            if (hearing === 'below3m') issues.push('耳语听力低于3米（不合格）');
+            else if (hearing === 'one3m') warns.push('一侧耳语听力3~4米（边缘）');
+
+            // 眩晕
+            const vertigo = data.vertigo || 'no';
+            if (vertigo === 'yes_severe') issues.push('眩晕病（反复发作，不合格）');
+            else if (vertigo === 'yes_mild') warns.push('偶发眩晕（需确认病因）');
+
+            // 耳部
+            const ear = data.earIssues || [];
+            if (ear.includes('ear_atresia')) issues.push('外耳道闭锁');
+            if (ear.includes('ear_otitis_active')) issues.push('中耳炎（活动期）');
+            if (ear.includes('ear_drum_perforation')) issues.push('鼓膜穿孔');
+            if (ear.includes('ear_deformity')) warns.push('耳廓畸形（需确认程度）');
+
+            // 嗅觉
+            const smell = data.smellAbility || 'normal';
+            if (smell === 'loss') issues.push('嗅觉完全丧失');
+            else if (smell === 'reduced') warns.push('嗅觉减退（需进一步评估）');
+
+            // 鼻部
+            const nose = data.noseIssues || [];
+            if (nose.includes('nose_perforation')) issues.push('鼻中隔穿孔');
+            if (nose.includes('nose_polyp')) issues.push('鼻息肉（影响通气）');
+            if (nose.includes('nose_sinusitis_severe')) issues.push('严重鼻窦炎（合并功能障碍）');
+            if (nose.includes('nose_rhinitis_severe')) issues.push('重度慢性肥厚性鼻炎');
+            if (nose.includes('nose_rhinitis_mild')) warns.push('慢性鼻炎（轻中度）');
+            if (nose.includes('nose_septum_deviated')) warns.push('鼻中隔偏曲（需确认功能影响）');
+
+            // 咽喉
+            const throat = data.throatIssues || [];
+            if (throat.includes('throat_tonsil_3')) issues.push('慢性扁桃体炎（Ⅱ度以上肥大）');
+            if (throat.includes('throat_osa_severe')) issues.push('严重睡眠呼吸暂停综合征');
+            if (throat.includes('throat_laryngitis_severe')) issues.push('严重慢性喉炎（声音嘶哑影响功能）');
+            if (throat.includes('throat_tonsil_mild')) warns.push('扁桃体炎（Ⅰ度）（需确认）');
+            if (throat.includes('throat_osa_mild')) warns.push('轻度睡眠呼吸暂停');
+
+            const pass = issues.length === 0;
+            const status = issues.length > 0 ? 'fail' : (warns.length > 0 ? 'warn' : 'pass');
+            issues.forEach(i => addFail(`耳鼻咽喉：${i}`));
+            warns.forEach(w => addWarn(`耳鼻咽喉：${w}`));
+            pushDetail('耳鼻咽喉科', '👂', pass, status, pass ? (warns.length > 0 ? '合格（有注意项）' : '合格') : `${issues.length}项不合格`);
+        }
+        evalENT();
+
+        // ===================== 五、眼科 =====================
+        function evalVision() {
+            const issues = [], warns = [];
+            const gender = data.gender || 'male';
+            const special = data.special || 'normal';
+
+            // 视力标准
+            let bareMin, corrMin;
+            if (special === 'special') {
+                bareMin = 4.8; corrMin = 5.0;
+            } else {
+                bareMin = 4.5; corrMin = 4.8;
+            }
+
+            const vLeft = parseFloat(data.visionLeft || 4.5);
+            const vRight = parseFloat(data.visionRight || 4.5);
+            const minV = Math.min(vLeft, vRight);
+            const lasik = data.lasik === 'yes';
+            const lasikMonths = parseInt(data.lasikMonths || 0);
+            const myopia = parseInt(data.myopia || 0);
+
+            // 色觉
+            const colorVision = data.colorVision || 'normal';
+            if (colorVision === 'blind') {
+                issues.push(`色盲（不合格）`);
+            } else if (colorVision === 'weak') {
+                if (special === 'special') issues.push('色弱（条件兵不合格）');
+                else issues.push('色弱（不合格）');
+            }
+
+            // 裸眼视力
+            if (!lasik) {
+                if (minV < bareMin) {
+                    if (minV >= 4.0) {
+                        // 需要矫正
+                        if (myopia > 600) {
+                            issues.push(`近视度数>${600}度，超出矫正上限（不合格）`);
+                        } else {
+                            const corrV = parseFloat(data.correctedVision || 0);
+                            if (corrV >= corrMin) {
+                                warns.push(`裸眼视力${vLeft}/${vRight}，矫正后合格（需配眼镜）`);
+                            } else if (corrV > 0) {
+                                issues.push(`裸眼视力${vLeft}/${vRight}，矫正后仍不足${corrMin}（不合格）`);
+                            } else {
+                                warns.push(`裸眼视力${vLeft}/${vRight} < ${bareMin}，需确认矫正视力≥${corrMin}`);
+                            }
+                        }
+                    } else {
+                        issues.push(`裸眼视力${vLeft}/${vRight}，低于4.0（不合格）`);
+                    }
+                }
+            } else {
+                // 激光手术
+                if (lasikMonths < 6) {
+                    issues.push(`准分子激光手术未满6个月（不合格，仅${lasikMonths}个月）`);
+                } else if (minV < bareMin) {
+                    issues.push(`手术后裸眼视力${vLeft}/${vRight} < ${bareMin}（不合格）`);
+                } else if (special === 'special') {
+                    issues.push('条件兵不接受激光手术眼（不合格）');
+                } else {
+                    warns.push(`激光手术满${lasikMonths}个月，裸眼视力${vLeft}/${vRight}，符合条件`);
+                }
+            }
+
+            // 眼部疾病
+            const eyeDis = data.eyeDisease || [];
+            if (eyeDis.includes('eye_exophthalmos')) issues.push('眼球突出/眼震');
+            if (eyeDis.includes('eye_strabismus_15')) issues.push('斜视>15°');
+            if (eyeDis.includes('eye_glaucoma')) issues.push('青光眼');
+            if (eyeDis.includes('eye_retina')) issues.push('视网膜疾病（视网膜脱离/黄斑病变等）');
+            if (eyeDis.includes('eye_cataract')) issues.push('白内障（影响视力）');
+            if (eyeDis.includes('eye_cornea')) issues.push('角膜严重病变');
+            if (eyeDis.includes('eye_strabismus_mild')) warns.push('斜视≤15°（需确认功能影响）');
+            if (eyeDis.includes('eye_dryeye_severe')) warns.push('严重干眼症（需治疗）');
+
+            const pass = issues.length === 0;
+            const status = issues.length > 0 ? 'fail' : (warns.length > 0 ? 'warn' : 'pass');
+            issues.forEach(i => addFail(`眼科：${i}`));
+            warns.forEach(w => addWarn(`眼科：${w}`));
+            pushDetail('眼科', '👁️', pass, status, pass ? (warns.length > 0 ? '合格（有注意项）' : '合格') : `${issues.length}项不合格`);
+        }
+        evalVision();
+
+        // ===================== 六、口腔科 =====================
+        function evalDental() {
+            const issues = [], warns = [];
+
+            const caries = data.caries || 'none';
+            if (caries === 'gt3') issues.push('深龋>3个（不合格）');
+            else if (caries === 'le3') warns.push('深龋≤3个（合格，建议治疗）');
+
+            const missing = data.missing || 'none';
+            if (missing === 'gt2') issues.push('缺齿>2颗（不合格）');
+            else if (missing === 'denture') warns.push('有义齿（假牙），需确认数量及功能');
+
+            const periodontal = data.periodontal || 'normal';
+            if (periodontal === 'severe') issues.push('重度牙周炎（不合格）');
+            else if (periodontal === 'moderate') warns.push('中度牙周炎（需治疗）');
+
+            const occlusion = data.occlusion || 'normal';
+            if (occlusion === 'severe') issues.push('严重咬合畸形（影响功能）');
+            else if (['crossbite','open','deep'].includes(occlusion)) warns.push(`咬合异常（${occlusion === 'crossbite' ? '反颌' : occlusion === 'open' ? '开颌' : '深覆颌'}，需评估严重程度）`);
+
+            const oral = data.oralIssues || [];
+            if (oral.includes('oral_malignant')) issues.push('口腔恶性肿瘤（不合格）');
+            if (oral.includes('oral_parotid')) warns.push('腮腺疾病（需明确性质）');
+            if (oral.includes('oral_ulcer')) warns.push('严重复发性口腔溃疡');
+
+            const pass = issues.length === 0;
+            const status = issues.length > 0 ? 'fail' : (warns.length > 0 ? 'warn' : 'pass');
+            issues.forEach(i => addFail(`口腔科：${i}`));
+            warns.forEach(w => addWarn(`口腔科：${w}`));
+            pushDetail('口腔科', '🦷', pass, status, pass ? (warns.length > 0 ? '合格（有注意项）' : '合格') : `${issues.length}项不合格`);
+        }
+        evalDental();
+
+        // ===================== 七、妇科（仅女性）=====================
+        function evalGynecology() {
+            if (data.gender !== 'female') return;
+            const issues = [], warns = [];
+
+            const mens = data.menstruation || 'normal';
+            if (mens === 'amenorrhea') issues.push('闭经（不合格）');
+            else if (mens === 'severe_dysmenorrhea') issues.push('严重痛经（不合格）');
+            else if (mens === 'irregular_bleeding') warns.push('子宫异常出血（需进一步检查）');
+            else if (mens === 'irregular') warns.push('月经不规律（需说明）');
+
+            const preg = data.pregnancy || 'none';
+            if (preg === 'pregnant') issues.push('妊娠期（不合格）');
+            else if (preg === 'uncertain') warns.push('妊娠状态不确定（建议先检查）');
+
+            const genitalia = data.genitalia || 'normal';
+            if (genitalia === 'deformity') issues.push('生殖器官发育异常/畸形（不合格）');
+            else if (genitalia === 'surgery') warns.push('有妇科手术史（需提供诊断证明）');
+
+            const pelvis = data.pelvisIssues || [];
+            if (pelvis.includes('pelvis_pid')) warns.push('盆腔炎（需治疗后复查）');
+            if (pelvis.includes('pelvis_myoma')) warns.push('子宫肌瘤（已确诊，需明确大小）');
+            if (pelvis.includes('pelvis_cyst')) warns.push('卵巢囊肿（已确诊，需明确大小）');
+            if (pelvis.includes('pelvis_mass')) issues.push('盆腔不明肿物（不合格）');
+            if (pelvis.includes('pelvis_endometriosis')) warns.push('子宫内膜异位症');
+
+            const vag = data.vaginitis || 'none';
+            if (vag === 'fungal_active') issues.push('霉菌性阴道炎（未治愈，不合格）');
+            else if (vag === 'trichomonas_active') issues.push('滴虫性阴道炎（未治愈，不合格）');
+            else if (['fungal_treated','trichomonas_treated'].includes(vag)) warns.push('阴道炎已治愈（需提供治愈证明）');
+
+            const cervix = data.cervixIssues || [];
+            if (cervix.includes('cervix_cancer')) issues.push('宫颈癌（不合格）');
+            if (cervix.includes('cervix_cin')) warns.push('宫颈上皮内瘤变（需进一步检查）');
+            if (cervix.includes('cervix_polyp')) warns.push('宫颈息肉（需手术摘除）');
+
+            // 妇科超声
+            const gynUS = data.labGynUS || [];
+            if (gynUS.includes('gus_ovarian_cyst_large')) issues.push('卵巢囊肿>5cm（不合格）');
+            if (gynUS.includes('gus_unknown_mass')) issues.push('盆腔不明包块（不合格）');
+            if (gynUS.includes('gus_myoma_large')) warns.push('子宫肌瘤≥3cm（需评估）');
+
+            const pass = issues.length === 0;
+            const status = issues.length > 0 ? 'fail' : (warns.length > 0 ? 'warn' : 'pass');
+            issues.forEach(i => addFail(`妇科：${i}`));
+            warns.forEach(w => addWarn(`妇科：${w}`));
+            pushDetail('妇科', '🌸', pass, status, pass ? (warns.length > 0 ? '合格（有注意项）' : '合格') : `${issues.length}项不合格`);
+        }
+        evalGynecology();
+
+        // ===================== 八、辅助检查 =====================
+        function evalLabTest() {
+            const issues = [], warns = [];
+
+            const blood = data.bloodRoutine || 'normal';
+            if (blood === 'multiple_abnormal') issues.push('血常规多项异常（不合格）');
+            else if (blood === 'anemia') warns.push('血红蛋白偏低（贫血）');
+            else if (blood === 'wbc_high') warns.push('白细胞明显升高（需排查感染）');
+            else if (blood === 'wbc_low') warns.push('白细胞偏低（需排查病因）');
+            else if (blood === 'plt_abnormal') warns.push('血小板异常（需进一步检查）');
+
+            const liver = data.liverFunc || 'normal';
+            if (liver === 'hbsag_positive') issues.push('乙肝表面抗原阳性（不合格）');
+            else if (liver === 'hepatitis_active') issues.push('肝炎活动期（不合格）');
+            else if (liver === 'alt_high') issues.push('转氨酶明显升高（需治疗）');
+            else if (liver === 'alt_mild') warns.push('转氨酶轻度升高（需复查）');
+
+            const urine = data.urineRoutine || 'normal';
+            if (urine === 'multiple') issues.push('尿常规多项异常（不合格）');
+            else if (urine === 'protein') warns.push('尿蛋白阳性（需排查肾脏疾病）');
+            else if (urine === 'glucose') warns.push('尿糖阳性（需排查糖尿病）');
+            else if (urine === 'rbc') warns.push('血尿（需排查肾炎/泌尿结石）');
+            else if (urine === 'wbc') warns.push('尿白细胞升高（泌尿系感染）');
+
+            const drug = data.drugTest || 'negative';
+            if (drug === 'positive') issues.push('毒品检测阳性（直接不合格）');
+
+            const xray = data.chestXray || 'normal';
+            if (xray === 'tb_active') issues.push('活动性肺结核（不合格）');
+            else if (xray === 'tb_severe_calcified') issues.push('大量钙化灶（不合格）');
+            else if (xray === 'other_abnormal') warns.push('胸部X光有异常影（需进一步确认）');
+            else if (xray === 'tb_calcified') warns.push('肺结核已治愈钙化灶（需提供证明）');
+
+            const ecg = data.ecg || 'normal';
+            if (['arrhythmia','myocardial'].includes(ecg)) issues.push(`心电图异常：${ecg === 'arrhythmia' ? '明显心律失常' : '心肌损害/ST-T改变'}（不合格）`);
+            else if (['sinus_brady','block','sinus_tachy'].includes(ecg)) warns.push(`心电图：${ecg === 'sinus_brady' ? '窦性心动过缓' : ecg === 'block' ? '传导阻滞' : '窦性心动过速'}（需明确病因）`);
+
+            const hiv = data.hiv || 'negative';
+            if (hiv === 'positive') issues.push('HIV阳性（不合格）');
+
+            const us = data.labUltrasound || [];
+            if (us.includes('us_single_kidney')) issues.push('单肾（不合格）');
+            if (us.includes('us_liver_diffuse')) issues.push('肝脏弥漫性病变（需评估）');
+            if (us.includes('us_kidney_diffuse')) issues.push('肾脏弥漫性病变（不合格）');
+            if (us.includes('us_liver_cyst_large')) warns.push('肝囊肿≥5cm（需评估）');
+            if (us.includes('us_hemangioma')) warns.push('肝血管瘤>5cm（需评估）');
+            if (us.includes('us_spleen')) warns.push('脾脏肿大（需明确病因）');
+            if (us.includes('us_kidney_stone')) warns.push('肾结石（需评估大小及是否影响功能）');
+            if (us.includes('us_gallstone')) warns.push('胆囊结石/胆囊炎（需评估）');
+
+            const pass = issues.length === 0;
+            const status = issues.length > 0 ? 'fail' : (warns.length > 0 ? 'warn' : 'pass');
+            issues.forEach(i => addFail(`辅助检查：${i}`));
+            warns.forEach(w => addWarn(`辅助检查：${w}`));
+            pushDetail('辅助检查', '🔬', pass, status, pass ? (warns.length > 0 ? '合格（有注意项）' : '合格') : `${issues.length}项不合格`);
+        }
+        evalLabTest();
+
+        // ===================== 渲染综合评估 =====================
+        const totalFails = failItems.length;
+        const totalWarns = warnItems.length;
+        const overallPass = totalFails === 0;
+
+        const verdict = overallPass
+            ? (totalWarns > 0 ? '基本符合条件，有少量注意项需确认' : '各项指标良好，符合应征条件')
+            : `发现 ${totalFails} 项不合格`;
+
+        document.getElementById('score-verdict').textContent = verdict;
+        document.getElementById('score-verdict').style.color = overallPass
+            ? (totalWarns > 0 ? '#e65100' : '#1b5e20') : '#c62828';
+
+        const bgColor = overallPass
+            ? (totalWarns > 0 ? 'linear-gradient(135deg,#ffe0b2,#ffcc80)' : 'linear-gradient(135deg,#c8e6c9,#a5d6a7)')
+            : 'linear-gradient(135deg,#ffcdd2,#ef9a9a)';
+        document.getElementById('score-ring').style.background = bgColor;
+        document.getElementById('score-emoji').textContent = overallPass ? (totalWarns > 0 ? '⚠️' : '✅') : '❌';
+
+        document.getElementById('score-tip').textContent = overallPass
+            ? (totalWarns > 0 ? '整体通过，建议关注注意事项并提前准备相关证明材料。' : '恭喜！各维度均在合格范围内，保持状态、积极备战，加油！🎉')
+            : `发现不合格项，建议积极治疗改善后重新评估。正式体检以军队指定医疗机构为准。`;
+
+        // 渲染各科室明细
+        const dimGrid = document.getElementById('dim-grid');
+        dimGrid.innerHTML = details.map(d => {
+            const cls = d.status === 'pass' ? 'status-pass' : d.status === 'warn' ? 'status-warn' : 'status-fail';
+            const lbl = d.status === 'pass' ? '✓ 合格' : d.status === 'warn' ? '⚠ 注意' : '✗ 不合格';
+            return `
+                <div class="dim-item">
+                    <div class="dim-item-top">
+                        <span class="dim-icon">${d.icon}</span>
+                        <span class="dim-name">${d.name}</span>
+                    </div>
+                    <span class="dim-status ${cls}">${lbl}</span>
+                    <div class="dim-detail">${d.text}</div>
+                </div>
+            `;
+        }).join('');
+
+        // 渲染不合格项
+        const riskList = document.getElementById('risk-list');
+        if (failItems.length > 0) {
+            riskList.innerHTML = failItems.map(f =>
+                `<div class="risk-item risk-high"><span class="risk-level">不合格</span><span class="risk-text">${f}</span></div>`
+            ).join('');
+        } else {
+            riskList.innerHTML = '<div class="risk-item risk-low"><span class="risk-level">良好</span><span class="risk-text">未发现明确不合格项，继续保持！</span></div>';
+        }
+
+        // 渲染注意事项
+        const warnList = document.getElementById('warn-list');
+        if (warnItems.length > 0) {
+            warnList.innerHTML = warnItems.map(w =>
+                `<div class="risk-item risk-mid"><span class="risk-level">注意</span><span class="risk-text">${w}</span></div>`
+            ).join('');
+        } else {
+            document.getElementById('warn-section').style.display = 'none';
+        }
+
+        // ===================== 30天计划 =====================
+        document.getElementById('tab-exercise').innerHTML = buildExercisePlan();
+        document.getElementById('tab-diet').innerHTML = buildDietPlan();
+        document.getElementById('tab-sleep').innerHTML = buildSleepPlan();
+
+        function planItem(emoji, text) {
+            return `<div class="plan-item"><span class="plan-dot">${emoji}</span><span class="plan-text">${text}</span></div>`;
+        }
+
+        function buildExercisePlan() {
+            const gender = data.gender || 'male';
+            const pushups = gender === 'male' ? '30个' : '10个';
+            const situps = gender === 'male' ? '30个' : '20个';
+            return `
+                <div class="plan-week">
+                    <div class="plan-week-title">📅 第1~10天：基础适应期</div>
+                    ${planItem('🚶','每天快走/慢跑 30 分钟（配速 6~7 分/km），心率控制在 120~140 次/分')}
+                    ${planItem('🤸','每天 10 分钟拉伸训练，重点：大腿前侧、小腿、脊柱')}
+                    ${planItem('💪','俯卧撑 3×10 组、深蹲 3×15 组，隔天进行')}
+                </div>
+                <div class="plan-week">
+                    <div class="plan-week-title">📅 第11~20天：强化提升期</div>
+                    ${planItem('🏃','增加跑步至 5km/天，尝试间歇跑（快慢交替：1分钟冲刺+2分钟恢复）')}
+                    ${planItem('🪖',`军事体能预备：仰卧起坐 3×${situps}、引体向上 3×5、平板支撑 3×1分钟`)}
+                    ${planItem('🏊','每周1次游泳或骑行，改善心肺耐力')}
+                </div>
+                <div class="plan-week">
+                    <div class="plan-week-title">📅 第21~30天：达标冲刺期</div>
+                    ${planItem('🎯',`每天完成：3000m 跑（目标<16分钟）+ 俯卧撑 ${pushups} + 仰卧起坐 ${situps}`)}
+                    ${planItem('⚡','高强度间歇（HIIT）每周2次，提升爆发力')}
+                    ${planItem('📊','第30天进行自我测评，与第1天对比进步')}
+                </div>`;
+        }
+
+        function buildDietPlan() {
+            const gender = data.gender || 'male';
+            return `
+                <div class="plan-week">
+                    <div class="plan-week-title">🥗 第1~10天：饮食调整期</div>
+                    ${planItem('🥦','每餐：1/2 蔬菜 + 1/4 优质蛋白（鸡胸/鱼/豆腐）+ 1/4 主食')}
+                    ${planItem('💧','每天饮水 2000~2500ml，早起一杯 300ml 温水')}
+                    ${planItem('🥚','加餐建议：鸡蛋+坚果或全脂牛奶，上午10点+下午3点各一次')}
+                </div>
+                <div class="plan-week">
+                    <div class="plan-week-title">🥗 第11~20天：营养强化期</div>
+                    ${planItem('🐟','每周2~3次深海鱼（三文鱼/沙丁鱼），补充 Omega-3 改善心血管')}
+                    ${planItem('🥕','每天1根胡萝卜或1把菠菜，补充维生素A，支持视力健康')}
+                    ${planItem('🍌','运动前30分钟：香蕉+牛奶，提升运动表现')}
+                </div>
+                <div class="plan-week">
+                    <div class="plan-week-title">🥗 第21~30天：习惯巩固期</div>
+                    ${planItem('⏰','规律三餐：早餐7~8点，午餐12点，晚餐18点前，不吃宵夜')}
+                    ${planItem('🥜','每天一小把坚果（核桃/杏仁，约15g），补充健康脂肪')}
+                    ${planItem('🍵','减少含糖饮料，用绿茶/菊花茶/柠檬水代替')}
+                </div>`;
+        }
+
+        function buildSleepPlan() {
+            return `
+                <div class="plan-week">
+                    <div class="plan-week-title">😴 第1~10天：睡眠重建期</div>
+                    ${planItem('⏰','设定固定起床时间（6:30）和入睡时间（22:30），写入手机日程')}
+                    ${planItem('📵','睡前1小时关闭手机/屏幕蓝光，换为阅读或冥想')}
+                    ${planItem('🛁','睡前用 40°C 温水泡脚10分钟，促进入眠')}
+                </div>
+                <div class="plan-week">
+                    <div class="plan-week-title">😴 第11~20天：睡眠质量提升期</div>
+                    ${planItem('🧘','每晚睡前：4-7-8呼吸法（吸气4秒-屏息7秒-呼气8秒）× 4次')}
+                    ${planItem('☀️','每天早上起床后10分钟晒太阳，调节生物钟')}
+                    ${planItem('☕','下午2点后不喝咖啡/浓茶，减少睡眠干扰')}
+                </div>
+                <div class="plan-week">
+                    <div class="plan-week-title">😴 第21~30天：军营作息适应期</div>
+                    ${planItem('🪖','模拟军营时间：6:00起床，22:00入睡，全程规律执行')}
+                    ${planItem('📓','建立睡眠日记，记录入睡时间、醒来时间、睡眠质量（1~5分）')}
+                    ${planItem('🎯','目标：保证每天7~8小时深度睡眠，精力充沛完成训练')}
+                </div>`;
+        }
+
+        function switchTab(name, btn) {
+            document.querySelectorAll('.plan-tab').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.plan-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + name).classList.add('active');
+        }
+
+        function restartTest() {
+            localStorage.removeItem('examData');
+        }
+    </script>
+</body>
+</html>
