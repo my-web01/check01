@@ -443,9 +443,9 @@
 
         function toggleCheckbox(el, e) {
             if (e) e.preventDefault();
-            el.classList.toggle('checked');
+            el.classList.toggle('selected');
             const input = el.querySelector('input');
-            input.checked = !input.checked;
+            input.checked =el.classList.contains('selected');
             if (input.value === 'us_other') {
                 document.getElementById('us-other-detail').style.display = input.checked ? 'block' : 'none';
             }
@@ -453,7 +453,7 @@
         }
 
         function saveData() {
-            const checkedUS = [...document.querySelectorAll('.checkbox-group .checkbox-item.checked')]
+            const checkedUS = [...document.querySelectorAll('.checkbox-group .checkbox-item.selected')]
                 .map(el => el.querySelector('input').value);
             examData.labUltrasound = checkedUS.filter(v => v.startsWith('us_'));
             examData.labGynUS = checkedUS.filter(v => v.startsWith('gus_'));
@@ -483,7 +483,7 @@
                 const cb = document.querySelector(`.checkbox-group input[value="${val}"]`);
                 if (cb) {
                     cb.checked = true;
-                    cb.closest('.checkbox-item').classList.add('checked');
+                    cb.closest('.checkbox-item').classList.add('selected');
                     if (val === 'us_other') {
                         document.getElementById('us-other-detail').style.display = 'block';
                     }
