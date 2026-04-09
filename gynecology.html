@@ -261,7 +261,7 @@
 
         function toggleCheckbox(el, e) {
             if (e) e.preventDefault();
-            el.classList.toggle('checked');
+            el.classList.toggle('selected');
             const input = el.querySelector('input');
             input.checked = !input.checked;
             if (input.value === 'pelvis_other') {
@@ -271,10 +271,10 @@
         }
 
         function saveData() {
-            const checkedPelvis = [...document.querySelectorAll('.checkbox-group .checkbox-item.checked')]
+            const checkedPelvis = [...document.querySelectorAll('.checkbox-group .checkbox-item.selected')]
                 .map(el => el.querySelector('input').value)
                 .filter(v => v.startsWith('pelvis_'));
-            const checkedCervix = [...document.querySelectorAll('.checkbox-group .checkbox-item.checked')]
+            const checkedCervix = [...document.querySelectorAll('.checkbox-group .checkbox-item.selected')]
                 .map(el => el.querySelector('input').value)
                 .filter(v => v.startsWith('cervix_'));
             examData.pelvisIssues = checkedPelvis;
@@ -305,7 +305,7 @@
                 const cb = document.querySelector(`.checkbox-group input[value="${val}"]`);
                 if (cb) {
                     cb.checked = true;
-                    cb.closest('.checkbox-item').classList.add('checked');
+                    cb.closest('.checkbox-item').classList.add('selected');
                     if (val === 'pelvis_other') {
                         document.getElementById('pelvis-other-detail').style.display = 'block';
                     }
