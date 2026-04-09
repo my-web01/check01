@@ -212,9 +212,9 @@
 
         function toggleCheckbox(el, e) {
             if (e) e.preventDefault();
-            el.classList.toggle('checked');
+            el.classList.toggle('selected');
             const input = el.querySelector('input');
-            input.checked = !input.checked;
+            input.checked = el.classList.contains('selected');
 
             // 处理其他选项的展开
             if (input.value === 'oral_other') {
@@ -228,7 +228,7 @@
         }
 
         function saveData() {
-            const checkedOral = [...document.querySelectorAll('.checkbox-group .checkbox-item.checked')]
+            const checkedOral = [...document.querySelectorAll('.checkbox-group .checkbox-item.selected')]
                 .map(el => el.querySelector('input').value);
             examData.oralIssues = checkedOral;
             examData.dentalMissingDetail = document.getElementById('missing-detail-text').value;
@@ -265,7 +265,7 @@
                     const cb = document.querySelector(`.checkbox-group input[value="${val}"]`);
                     if (cb) {
                         cb.checked = true;
-                        cb.closest('.checkbox-item').classList.add('checked');
+                        cb.closest('.checkbox-item').classList.add('selected');
                         if (val === 'oral_other') {
                             document.getElementById('oral-other-detail').style.display = 'block';
                         }
